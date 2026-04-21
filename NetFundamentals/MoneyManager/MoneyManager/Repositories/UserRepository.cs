@@ -4,7 +4,7 @@ using MoneyManager.Interfaces;
 
 namespace MoneyManager.Repositories;
 
-public class UserRepository : Repository<User>, IUserRepository
+public class UserRepository : Repository<User>
 {
     public UserRepository(MoneyManagerContext context) : base(context) { }
 

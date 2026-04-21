@@ -10,14 +10,12 @@ public class User
     public string Name { get; set; }
 
     [MaxLength(64)]
-
     public string Email { get; set; }
 
     [MaxLength(1024)]
     public string Hash { get; set; }
 
     [MaxLength(1024)]
-
     public string Salt { get; set; }
 
     public List<Asset> Assets { get; set; }

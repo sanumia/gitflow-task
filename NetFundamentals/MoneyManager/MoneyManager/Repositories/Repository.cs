@@ -14,13 +14,13 @@ public class Repository<T> : IRepository<T> where T : class
         _dbSet = context.Set<T>();
     }
 
-    public virtual async Task<T?> GetByIdAsync(Guid id) =>
-        await _dbSet.FindAsync(id);
+    public virtual async Task<T?> GetByIdAsync(Guid id) => await _dbSet.FindAsync(id);
 
     public virtual async Task<T> AddAsync(T entity)
     {
         await _dbSet.AddAsync(entity);
         await _context.SaveChangesAsync();
+
         return entity;
     }
 

@@ -12,7 +12,7 @@ using MoneyManager;
 namespace MoneyManager.Migrations
 {
     [DbContext(typeof(MoneyManagerContext))]
-    [Migration("20260415203716_InitialCreate")]
+    [Migration("20260421075002_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -52,15 +52,12 @@ namespace MoneyManager.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("Color")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(64)
                         .HasColumnType("nvarchar(64)");
 
-                    b.Property<Guid>("ParentId")
+                    b.Property<Guid?>("ParentId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Type")
@@ -154,7 +151,8 @@ namespace MoneyManager.Migrations
                 {
                     b.HasOne("MoneyManager.Entities.Category", "Parent")
                         .WithMany("SubCategories")
-                        .HasForeignKey("ParentId");
+                        .HasForeignKey("ParentId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Parent");
                 });

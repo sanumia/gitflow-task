@@ -3,7 +3,7 @@ using MoneyManager.Entities;
 using MoneyManager.Interfaces;
 namespace MoneyManager.Repositories;
 
-public class CategoryRepository : Repository<Category>, ICategoryRepository
+public class CategoryRepository : Repository<Category>
 {
     public CategoryRepository(MoneyManagerContext context) : base(context) { }
 

@@ -4,7 +4,7 @@ using MoneyManager.Interfaces;
 
 namespace MoneyManager.Repositories;
 
-public class TransactionRepository : Repository<Transaction>, ITransactionRepository
+public class TransactionRepository : Repository<Transaction>
 {
     public TransactionRepository(MoneyManagerContext context) : base(context) { }
 
@@ -18,9 +18,9 @@ public class TransactionRepository : Repository<Transaction>, ITransactionReposi
     {
         var now = DateTime.UtcNow;
         await _context.Transactions
-            .Where(t => t.Asset.UserId == userId &&
-                        t.Date.Year == now.Year &&
-                        t.Date.Month == now.Month)
+            .Where(t => t.Asset.UserId == userId 
+                    && t.Date.Year == now.Year 
+                    && t.Date.Month == now.Month)
             .ExecuteDeleteAsync();
     }
 
@@ -33,15 +33,20 @@ public class TransactionRepository : Repository<Transaction>, ITransactionReposi
             .Select(t => new TransactionListItem(
                 t.Asset.Name,
                 t.Category.Name,
-                t.Category.Parent != null ? t.Category.Parent.Name : null,
+                    t.Category.Parent != null 
+                    ? t.Category.Parent.Name 
+                    : null,
                 t.Amount,
                 t.Date,
                 t.Comment))
             .ToListAsync();
 
     public async Task<List<MonthlyTotalsItem>> GetMonthlyTotalsAsync(
-        Guid userId, DateTime startDate, DateTime endDate) =>
-        await _dbSet
+        Guid userId,
+        DateTime startDate,
+        DateTime endDate)
+    {
+        return await _dbSet
             .Where(t => t.Asset.UserId == userId && t.Date >= startDate && t.Date <= endDate)
             .GroupBy(t => new { t.Date.Year, t.Date.Month })
             .OrderBy(g => g.Key.Year)
@@ -52,17 +57,17 @@ public class TransactionRepository : Repository<Transaction>, ITransactionReposi
                 g.Where(t => t.Amount > 0).Sum(t => t.Amount),
                 g.Where(t => t.Amount < 0).Sum(t => t.Amount)))
             .ToListAsync();
+    }
 
-    public async Task<List<CategoryTotalsItem>> GetCategoryTotalsAsync(
-    Guid userId, int operationType)
+    public async Task<List<CategoryTotalsItem>> GetCategoryTotalsAsync(Guid userId, int operationType)
     {
         var now = DateTime.UtcNow;
 
         var data = await _dbSet
-            .Where(t => t.Asset.UserId == userId &&
-                        t.Category.Type == operationType &&
-                        t.Date.Year == now.Year &&
-                        t.Date.Month == now.Month)
+            .Where(t => t.Asset.UserId == userId 
+                    && t.Category.Type == operationType 
+                    && t.Date.Year == now.Year 
+                    && t.Date.Month == now.Month)
             .Select(t => new
             {
                 t.Amount,

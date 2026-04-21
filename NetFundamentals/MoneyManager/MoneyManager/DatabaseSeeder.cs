@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MoneyManager.Constants;
 using MoneyManager.Entities;
 
 namespace MoneyManager;
@@ -6,7 +7,8 @@ namespace MoneyManager;
 public class DatabaseSeeder
 {
     private readonly MoneyManagerContext _context;
-
+    private const int NumberOfAssetsForEvenUser = 4;
+    private const int NumberOfAssetsForOddUser = 3;
     public DatabaseSeeder(MoneyManagerContext context)
     {
         _context = context;
@@ -80,53 +82,66 @@ public class DatabaseSeeder
         return
         [
             new Category { Id = Guid.NewGuid(), Name = "Groceries",    Type = 1, ParentId = food.Id },
-        new Category { Id = Guid.NewGuid(), Name = "Restaurant",   Type = 1, ParentId = food.Id },
-        new Category { Id = Guid.NewGuid(), Name = "Taxi",         Type = 1, ParentId = transport.Id },
-        new Category { Id = Guid.NewGuid(), Name = "Public Trans", Type = 1, ParentId = transport.Id },
-        new Category { Id = Guid.NewGuid(), Name = "Rent",         Type = 1, ParentId = housing.Id },
-        new Category { Id = Guid.NewGuid(), Name = "Pharmacy",     Type = 1, ParentId = health.Id },
-    ];
+            new Category { Id = Guid.NewGuid(), Name = "Restaurant",   Type = 1, ParentId = food.Id },
+            new Category { Id = Guid.NewGuid(), Name = "Taxi",         Type = 1, ParentId = transport.Id },
+            new Category { Id = Guid.NewGuid(), Name = "Public Trans", Type = 1, ParentId = transport.Id },
+            new Category { Id = Guid.NewGuid(), Name = "Rent",         Type = 1, ParentId = housing.Id },
+            new Category { Id = Guid.NewGuid(), Name = "Pharmacy",     Type = 1, ParentId = health.Id },
+        ];
     }
 
     private List<Asset> SeedAssets(List<User> users)
     {
         var assets = new List<Asset>();
-        var names = new[] { "Main Card", "Savings", "Cash", "Credit Card" };
 
         for (int idx = 0; idx < users.Count; idx++)
         {
-            int count = idx % 2 == 0 ? 4 : 3;
+            int count = idx % 2 == 0 ? NumberOfAssetsForEvenUser : NumberOfAssetsForOddUser;
             for (int i = 0; i < count; i++)
             {
                 assets.Add(new Asset
                 {
                     Id = Guid.NewGuid(),
-                    Name = names[i],
+                    Name = AssetsConst.All[i],
                     UserId = users[idx].Id
                 });
             }
         }
+
         return assets;
     }
 
     private List<Transaction> SeedTransactions(List<Asset> assets, List<Category> categories)
     {
+        const int IncomeTypeValue = 0;
+        const int ExpenseTypeValue = 1;
+        const int MinDaysBack = 0;
+        const int MaxDaysBack = 180;
+        const int IncomeMinAmount = 500;
+        const int IncomeMaxAmount = 3000;
+        const int ExpenseMinAmount = 10;
+        const int ExpenseMaxAmount = 500;
+        const int DecimalPlaces = 3;
+
         var rnd = new Random(42);
         var transactions = new List<Transaction>();
         var now = DateTime.UtcNow;
 
+        // Используем перечисление вместо магического числа 0
         var leafCategories = categories
-            .Where(c => c.ParentId != null || c.Type == 0)
+            .Where(c => c.ParentId != null || c.Type == IncomeTypeValue)
             .ToList();
 
         for (int i = 0; i < 105; i++)
         {
             var asset = assets[rnd.Next(assets.Count)];
             var category = leafCategories[rnd.Next(leafCategories.Count)];
-            var daysBack = rnd.Next(0, 180);
-            var amount = category.Type == 0
-                ? Math.Round((decimal)(rnd.NextDouble() * 3000 + 500), 3)
-                : -Math.Round((decimal)(rnd.NextDouble() * 500 + 10), 3);
+
+            var daysBack = rnd.Next(MinDaysBack, MaxDaysBack);
+
+            var amount = category.Type == IncomeTypeValue
+                ? Math.Round((decimal)(rnd.NextDouble() * IncomeMaxAmount + IncomeMinAmount), DecimalPlaces)
+                : -Math.Round((decimal)(rnd.NextDouble() * ExpenseMaxAmount + ExpenseMinAmount), DecimalPlaces);
 
             transactions.Add(new Transaction
             {
@@ -138,6 +153,7 @@ public class DatabaseSeeder
                 Comment = rnd.Next(3) == 0 ? $"Comment {i}" : null
             });
         }
+
         return transactions;
     }
 }

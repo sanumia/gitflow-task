@@ -18,8 +18,7 @@ namespace MoneyManager.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
                     Type = table.Column<int>(type: "int", nullable: false),
-                    ParentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Color = table.Column<int>(type: "int", nullable: false)
+                    ParentId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -28,7 +27,8 @@ namespace MoneyManager.Migrations
                         name: "FK_Categories_Categories_ParentId",
                         column: x => x.ParentId,
                         principalTable: "Categories",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(

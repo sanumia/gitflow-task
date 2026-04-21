@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using MoneyManager.Constants;
+using System.ComponentModel.DataAnnotations;
 
 namespace MoneyManager.Entities;
 
@@ -16,6 +17,5 @@ public class Category
 
     public List<Category> SubCategories { get; set; } = new();
     public List<Transaction> Transactions { get; set; } = new();
-
-    public int Color { get; set; } = 0x233D4D;
+    public int Color { get; set; } = Colors.NileBlue;
 }
