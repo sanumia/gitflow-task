@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.Metrics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BracketsAnalysis;
+﻿namespace BracketsAnalysis;
 
 public class BracketsAnalyzer
 {
