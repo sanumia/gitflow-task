@@ -1,4 +1,5 @@
-﻿using MoneyManager.Repositories;
+﻿using MoneyManager.Models;
+using MoneyManager.Repositories;
 
 namespace MoneyManager;
 
@@ -20,51 +21,46 @@ public static class UserBalanceHelper
     }
 
     public static async Task PrintUserAssetsAsync(
-        UserRepository userRepository,
         AssetRepository assetRepository,
-        Guid userId,
-        string userName)
+        UserBaseInfo user)
     {
-        var assets = await assetRepository.GetAssetsByUserAsync(userId);
-        Console.WriteLine($"\nAssets for {userName}");
+        var assets = await assetRepository.GetAssetsByUserAsync(user.Id);
+        Console.WriteLine($"\nAssets for {user.Name}");
         foreach (var a in assets)
             Console.WriteLine($"  {a.Name}: {a.Balance:F2}");
     }
 
     public static async Task PrintUserTransactionsAsync(
         TransactionRepository transactionRepository,
-        Guid userId,
-        string userName,
-        int take = 5)
+        UserBaseInfo user,
+        int takeAmount = 5)
     {
-        var txList = await transactionRepository.GetTransactionsByUserAsync(userId);
-        Console.WriteLine($"\nTransactions for {userName} (first {take})");
-        foreach (var t in txList.Take(take))
+        var transactionsList = await transactionRepository.GetTransactionsByUserAsync(user.Id);
+        Console.WriteLine($"\nTransactions for {user.Name} (first {takeAmount})");
+        foreach (var t in transactionsList.Take(takeAmount))
             Console.WriteLine($"  [{t.Date:yyyy-MM-dd}] {t.AssetName}, {t.CategoryParentName} ({t.CategoryName}): {t.Amount:F2}");
     }
 
     public static async Task PrintMonthlyTotalsAsync(
         TransactionRepository transactionRepository,
-        Guid userId,
-        string userName,
+        UserBaseInfo user,
         int monthsBack = 6)
     {
         var monthly = await transactionRepository.GetMonthlyTotalsAsync(
-            userId,
+            user.Id,
             DateTime.UtcNow.AddMonths(-monthsBack),
             DateTime.UtcNow);
-        Console.WriteLine($"\nMonthly Totals for {userName} (last {monthsBack} months)");
+        Console.WriteLine($"\nMonthly Totals for {user.Name} (last {monthsBack} months)");
         foreach (var m in monthly)
             Console.WriteLine($"  {m.Year}-{m.Month:D2}: Income={m.Income:F2}, Expenses={m.Expenses:F2}");
     }
 
     public static async Task PrintCategoryExpensesThisMonthAsync(
         TransactionRepository transactionRepository,
-        Guid userId,
-        string userName)
+        UserBaseInfo user)
     {
-        var catTotals = await transactionRepository.GetCategoryTotalsAsync(userId, operationType: 1);
-        Console.WriteLine($"\nCategory Expenses this month for {userName}");
+        var catTotals = await transactionRepository.GetCategoryTotalsAsync(user.Id, operationType: 1);
+        Console.WriteLine($"\nCategory Expenses this month for {user.Name}");
         foreach (var c in catTotals)
             Console.WriteLine($"  {c.CategoryName}: {c.Amount:F2}");
     }

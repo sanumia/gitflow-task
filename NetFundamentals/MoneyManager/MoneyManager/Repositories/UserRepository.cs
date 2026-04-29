@@ -6,7 +6,9 @@ namespace MoneyManager.Repositories;
 
 public class UserRepository : Repository<User>
 {
-    public UserRepository(MoneyManagerContext context) : base(context) { }
+    public UserRepository(MoneyManagerContext context) : base(context)
+    {
+    }
 
     public async Task<User?> GetUserByEmailAsync(string email) =>
         await _dbSet.FirstOrDefaultAsync(u => u.Email == email);

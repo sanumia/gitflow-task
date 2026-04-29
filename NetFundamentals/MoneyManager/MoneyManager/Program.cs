@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using MoneyManager;
+using MoneyManager.Models;
 using MoneyManager.Repositories;
 
 var builder = new ConfigurationBuilder();
@@ -27,13 +28,10 @@ var transactionRepository = new TransactionRepository(context);
 await UserBalanceHelper.PrintAllUserBalancesAsync(userRepository);
 
 var users = await userRepository.GetUsersSortedByNameAsync();
-var firstUserId = users[0].Id;
-var firstUserName = users[0].Name;
+var firstUser = users[0];
+var firstUserInfo = new UserBaseInfo { Id = firstUser.Id, Name = firstUser.Name };
 
-await UserBalanceHelper.PrintUserAssetsAsync(userRepository, assetRepository, firstUserId, firstUserName);
-
-await UserBalanceHelper.PrintUserTransactionsAsync(transactionRepository, firstUserId, firstUserName, take: 5);
-
-await UserBalanceHelper.PrintMonthlyTotalsAsync(transactionRepository, firstUserId, firstUserName, monthsBack: 6);
-
-await UserBalanceHelper.PrintCategoryExpensesThisMonthAsync(transactionRepository, firstUserId, firstUserName);
+await UserBalanceHelper.PrintUserAssetsAsync(assetRepository, firstUserInfo);
+await UserBalanceHelper.PrintUserTransactionsAsync(transactionRepository, firstUserInfo, takeAmount: 5);
+await UserBalanceHelper.PrintMonthlyTotalsAsync(transactionRepository, firstUserInfo, monthsBack: 6);
+await UserBalanceHelper.PrintCategoryExpensesThisMonthAsync(transactionRepository, firstUserInfo);

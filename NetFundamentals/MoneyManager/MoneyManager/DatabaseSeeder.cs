@@ -7,8 +7,8 @@ namespace MoneyManager;
 public class DatabaseSeeder
 {
     private readonly MoneyManagerContext _context;
-    private const int NumberOfAssetsForEvenUser = 4;
-    private const int NumberOfAssetsForOddUser = 3;
+    private const int QuantityOfAssetsForEvenUser = 4;
+    private const int QuantityOfAssetsForOddUser = 3;
     public DatabaseSeeder(MoneyManagerContext context)
     {
         _context = context;
@@ -96,7 +96,7 @@ public class DatabaseSeeder
 
         for (int idx = 0; idx < users.Count; idx++)
         {
-            int count = idx % 2 == 0 ? NumberOfAssetsForEvenUser : NumberOfAssetsForOddUser;
+            int count = idx % 2 == 0 ? QuantityOfAssetsForEvenUser : QuantityOfAssetsForOddUser;
             for (int i = 0; i < count; i++)
             {
                 assets.Add(new Asset
@@ -123,25 +123,24 @@ public class DatabaseSeeder
         const int ExpenseMaxAmount = 500;
         const int DecimalPlaces = 3;
 
-        var rnd = new Random(42);
+        var randomValue = new Random(42);
         var transactions = new List<Transaction>();
         var now = DateTime.UtcNow;
 
-        // Используем перечисление вместо магического числа 0
         var leafCategories = categories
             .Where(c => c.ParentId != null || c.Type == IncomeTypeValue)
             .ToList();
 
         for (int i = 0; i < 105; i++)
         {
-            var asset = assets[rnd.Next(assets.Count)];
-            var category = leafCategories[rnd.Next(leafCategories.Count)];
+            var asset = assets[randomValue.Next(assets.Count)];
+            var category = leafCategories[randomValue.Next(leafCategories.Count)];
 
-            var daysBack = rnd.Next(MinDaysBack, MaxDaysBack);
+            var daysBack = randomValue.Next(MinDaysBack, MaxDaysBack);
 
             var amount = category.Type == IncomeTypeValue
-                ? Math.Round((decimal)(rnd.NextDouble() * IncomeMaxAmount + IncomeMinAmount), DecimalPlaces)
-                : -Math.Round((decimal)(rnd.NextDouble() * ExpenseMaxAmount + ExpenseMinAmount), DecimalPlaces);
+                ? Math.Round((decimal)(randomValue.NextDouble() * IncomeMaxAmount + IncomeMinAmount), DecimalPlaces)
+                : -Math.Round((decimal)(randomValue.NextDouble() * ExpenseMaxAmount + ExpenseMinAmount), DecimalPlaces);
 
             transactions.Add(new Transaction
             {
@@ -150,7 +149,7 @@ public class DatabaseSeeder
                 CategoryId = category.Id,
                 Amount = amount,
                 Date = now.AddDays(-daysBack),
-                Comment = rnd.Next(3) == 0 ? $"Comment {i}" : null
+                Comment = randomValue.Next(3) == 0 ? $"Comment {i}" : null
             });
         }
 

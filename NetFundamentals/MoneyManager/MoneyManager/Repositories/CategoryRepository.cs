@@ -5,7 +5,9 @@ namespace MoneyManager.Repositories;
 
 public class CategoryRepository : Repository<Category>
 {
-    public CategoryRepository(MoneyManagerContext context) : base(context) { }
+    public CategoryRepository(MoneyManagerContext context) : base(context)
+    {
+    }
 
     public async Task<Category?> GetCategoryWithHierarchyAsync(Guid id) =>
         await _dbSet
