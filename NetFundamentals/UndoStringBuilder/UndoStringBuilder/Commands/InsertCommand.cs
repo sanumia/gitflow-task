@@ -2,7 +2,8 @@
 
 namespace UndoStringBuilder.Commands;
 
-public class InsertCommand(StringBuilder receiver,
+public class InsertCommand(
+    StringBuilder receiver,
     int index,
     string text) : ICommand
 {

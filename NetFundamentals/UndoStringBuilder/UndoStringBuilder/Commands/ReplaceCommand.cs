@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 
 namespace UndoStringBuilder.Commands;
 
-internal class ReplaceCommand(StringBuilder receiver,
+public class ReplaceCommand(
+    StringBuilder receiver,
     int startIndex,
     int length,
     string newText,
@@ -17,6 +14,7 @@ internal class ReplaceCommand(StringBuilder receiver,
         receiver.Remove(startIndex, length);
         receiver.Insert(startIndex, newText);
     }
+
     public void Undo()
     {
         receiver.Remove(startIndex, newText.Length);

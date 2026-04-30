@@ -51,11 +51,7 @@ public class StringBuilderInvoker(string? initial = null, int? capacity = null)
 
     public StringBuilderInvoker Remove(int startIndex, int length)
     {
-        if (startIndex < 0 || startIndex >= _builder.Length)
-            throw new ArgumentOutOfRangeException(nameof(startIndex));
-        if (length < 0 || startIndex + length > _builder.Length)
-            throw new ArgumentOutOfRangeException(nameof(length));
-        string removed = _builder.ToString(startIndex, length);
+        string removed = ValidateRange(startIndex, length);
         var command = new RemoveCommand(_builder, startIndex, length, removed);
         ExecuteCommand(command);
 
@@ -64,12 +60,7 @@ public class StringBuilderInvoker(string? initial = null, int? capacity = null)
 
     public StringBuilderInvoker Replace(int startIndex, int length, string newValue)
     {
-        if (newValue == null) throw new ArgumentNullException(nameof(newValue));
-        if (startIndex < 0 || startIndex >= _builder.Length)
-            throw new ArgumentOutOfRangeException(nameof(startIndex));
-        if (length < 0 || startIndex + length > _builder.Length)
-            throw new ArgumentOutOfRangeException(nameof(length));
-        string original = _builder.ToString(startIndex, length);
+        string original = ValidateRange(startIndex, length);
         var command = new ReplaceCommand(_builder, startIndex, length, newValue, original);
         ExecuteCommand(command);
 
@@ -95,6 +86,16 @@ public class StringBuilderInvoker(string? initial = null, int? capacity = null)
         }
     }
 
+    private string ValidateRange(int startIndex, int length)
+    {
+        if (startIndex < 0 || startIndex >= _builder.Length)
+            throw new ArgumentOutOfRangeException(nameof(startIndex));
+        if (length < 0 || startIndex + length > _builder.Length)
+            throw new ArgumentOutOfRangeException(nameof(length));
+        return _builder.ToString(startIndex, length);
+    }
+
     public override string ToString() => _builder.ToString();
+
     public int Length => _builder.Length;
 }

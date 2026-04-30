@@ -2,7 +2,8 @@
 
 namespace UndoStringBuilder.Commands;
 
-public class RemoveCommand(StringBuilder receiver,
+public class RemoveCommand(
+    StringBuilder receiver,
     int startIndex,
     int length,
     string removedText) : ICommand
