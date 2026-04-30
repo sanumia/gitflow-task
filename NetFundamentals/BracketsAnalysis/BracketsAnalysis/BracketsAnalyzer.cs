@@ -34,6 +34,7 @@ public class BracketsAnalyzer
                 nestingLevel[c]++;
             }
         }
+
         return nestingLevel.Values.All(level => level == 0); ;
     }
 }
