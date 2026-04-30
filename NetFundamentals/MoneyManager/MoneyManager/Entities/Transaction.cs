@@ -17,5 +17,5 @@ public class Transaction
 
     public Guid AssetId { get; set; }
     public Asset Asset { get; set; }
-    public string? Comment { get; set; }
+    public string Comment { get; set; }
 }
