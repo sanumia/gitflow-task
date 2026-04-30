@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="BracketsAnalysis/BracketsAnalysis.csproj" />
+  <Project Path="BracketsValidator/BracketsValidator.csproj" Id="c5249636-8561-428a-9414-b653013be754" />
+</Solution>
