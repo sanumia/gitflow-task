@@ -1,23 +1,24 @@
 ﻿using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 
 namespace Serialization;
 
 [DataContract(Name = "user", Namespace = "")]
 public class UserContract
 {
-    [DataMember(Name = "id", Order = 1)]
+    [JsonPropertyName("id")]
     public int Id { get; set; }
 
-    [DataMember(Name = "name", Order = 2)]
+    [JsonPropertyName("name")]
     public string Name { get; set; } = string.Empty;
 
-    [DataMember(Name = "email", Order = 3)]
+    [JsonPropertyName("email")]
     public string Email { get; set; } = string.Empty;
 
-    [DataMember(Name = "created_at", Order = 4)]
+    [JsonPropertyName("created_at")]
     public string CreatedAt { get; set; } = string.Empty;
 
-    [IgnoreDataMember]
+    [JsonIgnore]
     public DateTime DateOfCreation
     {
         get => DateTime.Parse(CreatedAt);

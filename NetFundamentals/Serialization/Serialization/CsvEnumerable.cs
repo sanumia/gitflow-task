@@ -14,7 +14,6 @@ public class CsvEnumerable<T>(string filePath) : IEnumerable<T>
         using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
 
         foreach (var item in csv.GetRecords<T>())
-
             yield return item;
     }
 }

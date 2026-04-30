@@ -27,21 +27,15 @@ public class SerializationDbContext : DbContext
             entity.HasKey(u => u.Id);
 
             entity.Property(u => u.Id)
-                  .HasColumnName("user_id")
                   .ValueGeneratedNever();
 
             entity.Property(u => u.Name)
-                  .HasColumnName("name")
                   .IsRequired()
                   .HasMaxLength(256);
 
             entity.Property(u => u.Email)
-                  .HasColumnName("email")
                   .IsRequired()
                   .HasMaxLength(256);
-
-            entity.Property(u => u.DateOfCreation)
-                  .HasColumnName("created_at");
         });
     }
 }

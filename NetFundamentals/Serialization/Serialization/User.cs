@@ -1,6 +1,7 @@
 ﻿using CsvHelper.Configuration.Attributes;
 
 namespace Serialization;
+
 public class User
 {
     [Name("user_id")]
