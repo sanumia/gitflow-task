@@ -7,6 +7,7 @@ namespace CsvEnumerable;
 public class CsvEnumerable<T>(string filePath) : IEnumerable<T>
 {
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
     public IEnumerator<T> GetEnumerator()
     {
         using (var reader = new StreamReader(filePath))
@@ -18,6 +19,5 @@ public class CsvEnumerable<T>(string filePath) : IEnumerable<T>
                 yield return item;
             }
         }
-
     }
 }
