@@ -1,0 +1,70 @@
+﻿@model PagedResultModel<Profile>
+
+@{
+    ViewData["Title"] = "Profiles";
+    var query = Model.Query;
+
+    string SortUrl(string sortBy)
+    {
+        var direction = query.SortBy == sortBy && query.SortDirection == "asc" ? "desc" : "asc";
+        return $"?sortBy={sortBy}&sortDirection={direction}&firstName={query.FirstName}&lastName={query.LastName}&page=1&pageSize={query.PageSize}";
+    }
+
+    string PageUrl(int page)
+    {
+        return $"?page={page}&pageSize={query.PageSize}&sortBy={query.SortBy}&sortDirection={query.SortDirection}&firstName={query.FirstName}&lastName={query.LastName}";
+    }
+}
+
+<h2>Profiles</h2>
+
+<form method="get" action="/Profile">
+    <input type="text" name="firstName" value="@query.FirstName" placeholder="First name" />
+    <input type="text" name="lastName" value="@query.LastName" placeholder="Last name" />
+    <input type="hidden" name="sortBy" value="@query.SortBy" />
+    <input type="hidden" name="sortDirection" value="@query.SortDirection" />
+    <input type="hidden" name="pageSize" value="@query.PageSize" />
+    <button type="submit">Search</button>
+    <a href="/Profile">Reset</a>
+</form>
+
+<table border="1" cellpadding="5">
+    <thead>
+        <tr>
+            <th><a href="@SortUrl("FirstName")">First Name @(query.SortBy == "FirstName" ? (query.SortDirection == "asc" ? "(asc)" : "(desc)") : "")</a></th>
+            <th><a href="@SortUrl("LastName")">Last Name @(query.SortBy == "LastName" ? (query.SortDirection == "asc" ? "(asc)" : "(desc)") : "")</a></th>
+            <th><a href="@SortUrl("Birthday")">Birthday @(query.SortBy == "Birthday" ? (query.SortDirection == "asc" ? "(asc)" : "(desc)") : "")</a></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var profile in Model.Items)
+        {
+            <tr>
+                <td>@profile.FirstName</td>
+                <td>@profile.LastName</td>
+                <td>@profile.Birthday.ToString("yyyy-MM-dd")</td>
+            </tr>
+        }
+        @if (!Model.Items.Any())
+        {
+            <tr><td colspan="3">No profiles found.</td></tr>
+        }
+    </tbody>
+</table>
+
+<p>Page @Model.Page of @Model.TotalPages (@Model.TotalCount total)</p>
+
+@if (Model.HasPreviousPage)
+{
+    <a href="@PageUrl(Model.Page - 1)">Previous</a>
+}
+
+@for (int i = 1; i <= Model.TotalPages; i++)
+{
+    <a href="@PageUrl(i)"><b>@(i == Model.Page ? $"[{i}]" : $"{i}")</b></a>
+}
+
+@if (Model.HasNextPage)
+{
+    <a href="@PageUrl(Model.Page + 1)">Next</a>
+}
