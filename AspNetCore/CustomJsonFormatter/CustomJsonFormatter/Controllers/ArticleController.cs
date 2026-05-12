@@ -11,6 +11,7 @@ public class ArticleController(JsonDbContext context) : ControllerBase
     public ActionResult<IEnumerable<Article>> GetArticles()
     {
         var articles = context.Articles.ToList();
+
         return Ok(articles);
     }
 
@@ -20,6 +21,7 @@ public class ArticleController(JsonDbContext context) : ControllerBase
         var article = context.Articles.Find(id);
         if (article is null)
             return NotFound();
+
         return Ok(article);
     }
 }

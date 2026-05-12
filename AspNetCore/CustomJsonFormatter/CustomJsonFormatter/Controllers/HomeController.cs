@@ -1,6 +1,4 @@
-using CustomJsonFormatter.Models;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
 
 namespace CustomJsonFormatter.Controllers;
 
