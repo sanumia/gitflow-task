@@ -1,13 +1,18 @@
-﻿@model PagedResultModel<Profile>
+﻿@using RateLimit.Models.Enums
+@model PagedResultModel<Profile>
 
 @{
     ViewData["Title"] = "Profiles";
     var query = Model.Query;
 
-    string SortUrl(string sortBy)
+    string SortUrl(SortFieldType sortBy)
     {
-        var direction = query.SortBy == sortBy && query.SortDirection == "asc" ? "desc" : "asc";
-        return $"?sortBy={sortBy}&sortDirection={direction}&firstName={query.FirstName}&lastName={query.LastName}&page=1&pageSize={query.PageSize}";
+        var direction = (query.SortBy == sortBy && query.SortDirection == SortDirectionType.Asc)
+            ? SortDirectionType.Desc
+            : SortDirectionType.Asc;
+    
+        return $"?sortBy={sortBy.ToString().ToLower()}&sortDirection={direction.ToString().ToLower()}" +
+               $"&firstName={query.FirstName}&lastName={query.LastName}&page=1&pageSize={query.PageSize}";
     }
 
     string PageUrl(int page)
@@ -31,9 +36,30 @@
 <table border="1" cellpadding="5">
     <thead>
         <tr>
-            <th><a href="@SortUrl("FirstName")">First Name @(query.SortBy == "FirstName" ? (query.SortDirection == "asc" ? "(asc)" : "(desc)") : "")</a></th>
-            <th><a href="@SortUrl("LastName")">Last Name @(query.SortBy == "LastName" ? (query.SortDirection == "asc" ? "(asc)" : "(desc)") : "")</a></th>
-            <th><a href="@SortUrl("Birthday")">Birthday @(query.SortBy == "Birthday" ? (query.SortDirection == "asc" ? "(asc)" : "(desc)") : "")</a></th>
+            <th>
+                <a href="@SortUrl(SortFieldType.FirstName)">
+                    First Name
+                    @(query.SortBy == SortFieldType.FirstName
+                        ? (query.SortDirection == SortDirectionType.Asc ? "(asc)" : "(desc)")
+                        : "")
+                </a>
+            </th>
+            <th>
+                <a href="@SortUrl(SortFieldType.LastName)">
+                    Last Name
+                    @(query.SortBy == SortFieldType.LastName
+                        ? (query.SortDirection == SortDirectionType.Asc ? "(asc)" : "(desc)")
+                        : "")
+                </a>
+            </th>
+            <th>
+                <a href="@SortUrl(SortFieldType.Birthday)">
+                    Birthday
+                    @(query.SortBy == SortFieldType.Birthday
+                        ? (query.SortDirection == SortDirectionType.Asc ? "(asc)" : "(desc)")
+                        : "")
+                </a>
+            </th>
         </tr>
     </thead>
     <tbody>

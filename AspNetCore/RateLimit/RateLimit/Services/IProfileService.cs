@@ -5,5 +5,4 @@ namespace RateLimit.Services;
 public interface IProfileService
 {
     Task<PagedResultModel<Profile>> GetProfilesAsync(ProfileQueryModel query);
-    //Profile? Get
 }

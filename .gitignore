@@ -35,7 +35,6 @@ bld/
 [Ll]og/
 [Ll]ogs/
 
-lib/
 **/wwwroot/lib/
 # Visual Studio 2015/2017 cache/options directory
 .vs/
@@ -482,3 +481,7 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+/postman
+/.postman
+wwwroot/lib/
+wwwroot/lib/**

@@ -3,18 +3,11 @@ using System.Text.Json;
 
 namespace RateLimit.Data;
 
-public class ProfileSeeder
+public class ProfileSeeder(IWebHostEnvironment env)
 {
-    private readonly IWebHostEnvironment _env;
-
-    public ProfileSeeder(IWebHostEnvironment env)
-    {
-        _env = env;
-    }
-
     public void Seed()
     {
-        var filePath = Path.Combine(_env.ContentRootPath, "Data", "profiles.json");
+        var filePath = Path.Combine(env.ContentRootPath, "Data", "profiles.json");
 
         var profiles = new List<Profile>
         {

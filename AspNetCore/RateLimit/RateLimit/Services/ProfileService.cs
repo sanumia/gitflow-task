@@ -1,4 +1,5 @@
 ﻿using RateLimit.Models;
+using RateLimit.Models.Enums;
 using System.Text.Json;
 
 namespace RateLimit.Services;
@@ -17,9 +18,9 @@ public class ProfileService : IProfileService
     {
         var filePath = Path.Combine(env.ContentRootPath, "Data", "profiles.json");
         var json = File.ReadAllText(filePath);
-        _profiles = JsonSerializer.Deserialize<List<Profile>>(json, _jsonOptions)
-                    ?? new List<Profile>();
+        _profiles = JsonSerializer.Deserialize<List<Profile>>(json, _jsonOptions) ?? [];
     }
+
     public async Task<PagedResultModel<Profile>> GetProfilesAsync(ProfileQueryModel query)
     {
         await Task.Delay(500);
@@ -27,14 +28,18 @@ public class ProfileService : IProfileService
         IEnumerable<Profile> result = _profiles;
 
         result = ApplyFiltering(result, query);
-        result = ApplySorting(result, query);
-        var (items, totalCount) = ApplyPaging(result, query);
+
+        var sortBy = query.SortBy ?? SortFieldType.LastName;
+        var sortDirection = query.SortDirection ?? SortDirectionType.Asc;
+        result = ApplySorting(result, sortBy, sortDirection);
+
+        var items = ApplyPaging(result, query.PageNumber, query.PageSize);
 
         return new PagedResultModel<Profile>
         {
             Items = items,
-            TotalCount = totalCount,
-            Page = query.Page,
+            TotalCount = result.Count(),
+            Page = query.PageNumber,
             PageSize = query.PageSize,
             Query = query
         };
@@ -57,32 +62,37 @@ public class ProfileService : IProfileService
         return source;
     }
 
-    private static IEnumerable<Profile> ApplySorting(IEnumerable<Profile> source, ProfileQueryModel query)
+    private static IEnumerable<Profile> ApplySorting(
+        IEnumerable<Profile> source,
+        SortFieldType sortBy,
+        SortDirectionType sortDirection)
     {
-        var sortBy = query.SortBy ?? "LastName";
-        var sortDirection = query.SortDirection ?? "asc";
-
-        return sortBy.ToLower() switch
-        {
-            "firstname" => sortDirection == "desc"
-                ? source.OrderByDescending(p => p.FirstName)
-                : source.OrderBy(p => p.FirstName),
-            "birthday" => sortDirection == "desc"
-                ? source.OrderByDescending(p => p.Birthday)
-                : source.OrderBy(p => p.Birthday),
-            _ => sortDirection == "desc"
-                ? source.OrderByDescending(p => p.LastName)
-                : source.OrderBy(p => p.LastName)
-        };
+        var keySelector = GetKeySelector(sortBy);
+        return ApplyOrdering(source, keySelector, sortDirection);
     }
 
-    private static (List<Profile> Items, int TotalCount) ApplyPaging(IEnumerable<Profile> source, ProfileQueryModel query)
+    private static Func<Profile, object> GetKeySelector(SortFieldType sortBy) =>
+    sortBy switch
     {
-        var totalCount = source.Count();
-        var items = source
-            .Skip((query.Page - 1) * query.PageSize)
-            .Take(query.PageSize)
+        SortFieldType.FirstName => p => p.FirstName,
+        SortFieldType.Birthday => p => p.Birthday,
+        _ => p => p.LastName
+    };
+
+    private static IEnumerable<Profile> ApplyOrdering(
+        IEnumerable<Profile> source,
+        Func<Profile, object> keySelector,
+        SortDirectionType direction)
+    {
+        return direction == SortDirectionType.Desc
+            ? source.OrderByDescending(keySelector)
+            : source.OrderBy(keySelector);
+    }
+    private static List<Profile> ApplyPaging(IEnumerable<Profile> source, int pageNumber, int pageSize)
+    {
+        return source
+            .Skip((pageNumber - 1) *pageSize)
+            .Take(pageSize)
             .ToList();
-        return (items, totalCount);
     }
 }
