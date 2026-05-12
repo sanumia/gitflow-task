@@ -5,7 +5,7 @@ namespace CustomModelBinders.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class PointController : Controller
+public class LocationController : Controller
 {
     [HttpGet]
     public IActionResult GetPoint(Point point)
