@@ -6,6 +6,7 @@ namespace CustomModelBinders.ModelBinders;
 public class PointModelBinder : IModelBinder
 {
     private const int CoordinatesLength = 3;
+
     public Task BindModelAsync(ModelBindingContext bindingContext)
     {
         var value = bindingContext.ValueProvider.GetValue("coord").FirstValue;
