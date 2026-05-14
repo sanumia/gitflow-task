@@ -1,0 +1,20 @@
+[
+  {
+    "Id": "20d59d80-e543-4601-a1ea-fb0acc5f7de6",
+    "FirstName": "Anna",
+    "LastName": "Smith",
+    "Birthday": "1990-04-15T00:00:00"
+  },
+  {
+    "Id": "db359ffb-c29c-420d-a486-0f738504c256",
+    "FirstName": "Max",
+    "LastName": "Brown",
+    "Birthday": "1985-11-22T00:00:00"
+  },
+  {
+    "Id": "9a058d36-9aa5-4217-a116-ec1fd7993a74",
+    "FirstName": "Mary",
+    "LastName": "Miller",
+    "Birthday": "1995-07-03T00:00:00"
+  }
+]
