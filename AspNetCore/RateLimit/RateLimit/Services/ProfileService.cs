@@ -68,6 +68,7 @@ public class ProfileService : IProfileService
         SortDirectionType sortDirection)
     {
         var keySelector = GetKeySelector(sortBy);
+
         return ApplyOrdering(source, keySelector, sortDirection);
     }
 
@@ -91,7 +92,7 @@ public class ProfileService : IProfileService
     private static List<Profile> ApplyPaging(IEnumerable<Profile> source, int pageNumber, int pageSize)
     {
         return source
-            .Skip((pageNumber - 1) *pageSize)
+            .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
             .ToList();
     }
