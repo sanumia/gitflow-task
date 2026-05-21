@@ -3,12 +3,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CustomJsonFormatter;
 
-public class JsonDbContext : DbContext
+public class JsonDbContext(DbContextOptions<JsonDbContext> options) : DbContext(options)
 {
-    public JsonDbContext(DbContextOptions<JsonDbContext> options) : base(options) 
-    {
-    }
-
     public DbSet<Article> Articles { get; set; }
     public DbSet<Profile> Profiles { get; set; }
 

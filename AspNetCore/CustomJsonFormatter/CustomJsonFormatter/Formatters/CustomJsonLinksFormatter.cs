@@ -8,18 +8,19 @@ namespace CustomJsonFormatter.Formatters;
 
 public class CustomJsonLinksFormatter : TextOutputFormatter
 {
+    private const string MediaTypeForCustomParsing = "application/json+custom";
+    private const string SelfLinkKey = "self";
+    private const string GetAuthorLinkKey = "get-author";
     public CustomJsonLinksFormatter()
     {
-        SupportedMediaTypes.Add(MediaTypeHeaderValue.Parse("application/json+custom"));
+        SupportedMediaTypes.Add(MediaTypeHeaderValue.Parse(MediaTypeForCustomParsing));
         SupportedEncodings.Add(Encoding.UTF8);
         SupportedEncodings.Add(Encoding.Unicode);
     }
 
     protected override bool CanWriteType(Type? type)
     {
-        if (type == null) return false;
-
-        return true;
+        return type != null;
     }
 
     public override async Task WriteResponseBodyAsync(OutputFormatterWriteContext context, Encoding selectedEncoding)
@@ -31,6 +32,7 @@ public class CustomJsonLinksFormatter : TextOutputFormatter
         if (responseObject == null)
         {
             await httpContext.Response.WriteAsync("null", selectedEncoding);
+
             return;
         }
 
@@ -43,41 +45,28 @@ public class CustomJsonLinksFormatter : TextOutputFormatter
     {
         string BuildUrl(string path) => $"{request.Scheme}://{request.Host}{path}";
 
-        if (obj is Article article)
+        return obj switch
         {
-            return new ResponseJson<Article>
+            Article article => new ResponseJson<Article>
             {
                 Data = article,
                 Links = new Dictionary<string, string>
                 {
-                    ["self"] = BuildUrl($"/api/article/{article.Id}"),
-                    ["get-author"] = BuildUrl($"/api/profile/{article.AuthorId}")
+                    [SelfLinkKey] = BuildUrl($"/api/article/{article.Id}"),
+                    [GetAuthorLinkKey] = BuildUrl($"/api/profile/{article.AuthorId}")
                 }
-            };
-        }
-
-        if (obj is Profile profile)
-        {
-            return new ResponseJson<Profile>
+            },
+            Profile profile => new ResponseJson<Profile>
             {
                 Data = profile,
                 Links = new Dictionary<string, string>
                 {
-                    ["self"] = BuildUrl($"/api/profile/{profile.Id}")
+                    [SelfLinkKey] = BuildUrl($"/api/profile/{profile.Id}")
                 }
-            };
-        }
-
-        if (obj is IEnumerable<Article> articles)
-        {
-            return articles.Select(a => WrapWithLinks(a, request));
-        }
-
-        if (obj is IEnumerable<Profile> profiles)
-        {
-            return profiles.Select(p => WrapWithLinks(p, request));
-        }
-
-        return obj;
+            },
+            IEnumerable<Article> articles => articles.Select(a => WrapWithLinks(a, request)),
+            IEnumerable<Profile> profiles => profiles.Select(p => WrapWithLinks(p, request)),
+            _ => throw new InvalidOperationException($"Unexpected object type")
+        };
     }
 }

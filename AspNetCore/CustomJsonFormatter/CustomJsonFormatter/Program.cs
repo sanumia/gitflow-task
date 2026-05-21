@@ -9,13 +9,14 @@ builder.Services.AddControllersWithViews()
 
 var connectionString =
     builder.Configuration.GetConnectionString("DefaultConnection")
-        ?? throw new InvalidOperationException("Connection string"
-        + "'DefaultConnection' not found.");
+    ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
 builder.Services.AddDbContext<JsonDbContext>(options =>
     options.UseSqlServer(connectionString));
 
 builder.Services.AddTransient<DatabaseSeeder>();
+
+builder.Services.AddAutoMapper(typeof(Program));
 
 var app = builder.Build();
 
@@ -40,8 +41,5 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapControllers();
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();

@@ -10,9 +10,9 @@ public class ProfileController(JsonDbContext context) : ControllerBase
     public ActionResult GetById(int id)
     {
         var profile = context.Profiles.Find(id);
-        if (profile is null)
-            return NotFound();
 
-        return Ok(profile);
+        return profile is null
+            ? NotFound()
+            : Ok(profile);
     } 
 }
