@@ -1,4 +1,0 @@
-name: New Environment
-values:
-  - key: 'GET https://localhost:7257/api/profile'
-    value: ''
