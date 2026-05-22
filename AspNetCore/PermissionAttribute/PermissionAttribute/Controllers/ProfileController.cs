@@ -8,23 +8,14 @@ using PermissionAttribute.Models.Enums;
 namespace PermissionAttribute.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
-public class ProfileController : ControllerBase
+[Route("api/profile")]
+public class ProfileController(PermissionDbContext context, UserManager<IdentityUser> userManager) : ControllerBase
 {
-    private readonly PermissionDbContext _context;
-    private readonly UserManager<IdentityUser> _userManager;
-
-    public ProfileController(PermissionDbContext context, UserManager<IdentityUser> userManager)
-    {
-        _context = context;
-        _userManager = userManager;
-    }
-
     [HttpGet("{userId}")]
     [HasPermission(Permissions.GetProfileById)]
     public async Task<IActionResult> GetProfileByUserId(string userId)
     {
-        var contact = await _context.Contacts
+        var contact = await context.Contacts
             .FirstOrDefaultAsync(c => c.OwnerID == userId);
 
         if (contact == null)
@@ -37,7 +28,7 @@ public class ProfileController : ControllerBase
     [HasPermission(Permissions.GetProfiles)]
     public async Task<IActionResult> GetAllProfiles()
     {
-        var contacts = await _context.Contacts.ToListAsync();
+        var contacts = await context.Contacts.ToListAsync();
         return Ok(contacts);
     }
 
@@ -50,14 +41,14 @@ public class ProfileController : ControllerBase
 
         if (string.IsNullOrEmpty(newContact.OwnerID))
         {
-            var user = await _userManager.GetUserAsync(User);
+            var user = await userManager.GetUserAsync(User);
             if (user == null)
                 return Unauthorized();
             newContact.OwnerID = user.Id;
         }
 
-        _context.Contacts.Add(newContact);
-        await _context.SaveChangesAsync();
+        context.Contacts.Add(newContact);
+        await context.SaveChangesAsync();
 
         return CreatedAtAction(nameof(GetProfileByUserId), new { userId = newContact.OwnerID }, newContact);
     }
@@ -69,7 +60,7 @@ public class ProfileController : ControllerBase
         if (id != updatedContact.ContactId)
             return BadRequest("ID mismatch");
 
-        var existing = await _context.Contacts.FindAsync(id);
+        var existing = await context.Contacts.FindAsync(id);
         if (existing == null)
             return NotFound();
 
@@ -81,8 +72,8 @@ public class ProfileController : ControllerBase
         existing.Email = updatedContact.Email;
         existing.Status = updatedContact.Status;
 
-        _context.Contacts.Update(existing);
-        await _context.SaveChangesAsync();
+        context.Contacts.Update(existing);
+        await context.SaveChangesAsync();
 
         return Ok(existing);
     }
@@ -91,12 +82,12 @@ public class ProfileController : ControllerBase
     [HasPermission(Permissions.DeleteProfile)]
     public async Task<IActionResult> DeleteProfile(int id)
     {
-        var contact = await _context.Contacts.FindAsync(id);
+        var contact = await context.Contacts.FindAsync(id);
         if (contact == null)
             return NotFound();
 
-        _context.Contacts.Remove(contact);
-        await _context.SaveChangesAsync();
+        context.Contacts.Remove(contact);
+        await context.SaveChangesAsync();
 
         return NoContent();
     }
