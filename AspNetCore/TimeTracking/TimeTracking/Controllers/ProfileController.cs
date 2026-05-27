@@ -12,15 +12,16 @@ public class ProfileController(IProfileService service) : ControllerBase
     public ActionResult<Profile> GetById(int id)
     {
         var profile = service.GetById(id);
-        if (profile is null)
-            return NotFound();
-        return Ok(profile);
+        return profile is null
+            ? NotFound()
+            : Ok(profile);
     }
 
     [HttpGet]
     public ActionResult<IEnumerable<Profile>> GetAll()
     {
         var profiles = service.GetAll();
+
         return Ok(profiles);
     }
 
@@ -31,6 +32,7 @@ public class ProfileController(IProfileService service) : ControllerBase
             return BadRequest("Name is required.");
 
         service.Add(profile);
+
         return CreatedAtAction(nameof(GetById), new { id = profile.Id }, profile);
     }
 
@@ -40,22 +42,21 @@ public class ProfileController(IProfileService service) : ControllerBase
         if (id != updatedProfile.Id)
             return BadRequest("ID mismatch.");
 
-        var existing = service.GetById(id);
-        if (existing is null)
-            return NotFound();
+        bool updated = service.Update(updatedProfile);
 
-        service.Update(updatedProfile);
-        return NoContent();
+        return !updated
+            ? NotFound()
+            : NoContent();
     }
 
     [HttpDelete("{id}")]
     public ActionResult Delete(int id)
     {
         var existing = service.GetById(id);
-        if (existing is null)
-            return NotFound();
+        bool deleted = service.Delete(id);
 
-        service.Delete(id);
-        return NoContent();
+        return !deleted
+            ? NotFound()
+            : NoContent();
     }
 }

@@ -29,22 +29,34 @@ public class ProfileService : IProfileService
         _profiles.Add(profile);
     }
 
-    public void Update(Profile profile)
+    public bool Update(Profile profile)
     {
         var existing = GetById(profile.Id);
         if (existing != null)
         {
             existing.Name = profile.Name;
             existing.Email = profile.Email;
+            return true;
         }
+        else
+        {
+            return false;
+        }
+
     }
 
-    public void Delete(int id)
+    public bool Delete(int id)
     {
         var profile = GetById(id);
         if (profile != null)
         {
             _profiles.Remove(profile);
+
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 }
