@@ -1,5 +1,6 @@
 using CustomJsonFormatter;
 using CustomJsonFormatter.Extensions;
+using CustomJsonFormatter.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,9 +15,12 @@ var connectionString =
 builder.Services.AddDbContext<JsonDbContext>(options =>
     options.UseSqlServer(connectionString));
 
+
 builder.Services.AddTransient<DatabaseSeeder>();
 
 builder.Services.AddAutoMapper(typeof(Program));
+
+builder.Services.AddScoped<IArticleService, ArticleService>();
 
 var app = builder.Build();
 

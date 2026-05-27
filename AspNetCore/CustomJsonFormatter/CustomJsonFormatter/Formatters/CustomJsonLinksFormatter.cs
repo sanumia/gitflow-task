@@ -11,6 +11,7 @@ public class CustomJsonLinksFormatter : TextOutputFormatter
     private const string MediaTypeForCustomParsing = "application/json+custom";
     private const string SelfLinkKey = "self";
     private const string GetAuthorLinkKey = "get-author";
+
     public CustomJsonLinksFormatter()
     {
         SupportedMediaTypes.Add(MediaTypeHeaderValue.Parse(MediaTypeForCustomParsing));
