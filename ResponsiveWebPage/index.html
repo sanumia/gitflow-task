@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="header__top">
+            <input type="checkbox" id="header__toggle" class="header__toggle">
+            <label for="header__toggle" class="header__burger">
+                <img class="header__menu-img" src="static/icons/menu.svg" alt="">
+            </label>
+            <ul class="header__menu">
+                <li class="header__menu-account">
+                    <img src="static/icons/user.svg" alt="">
+                    <h1>Личный кабинет</h1>
+                </li>
+                <li class="header__menu-rub">
+                    <img src="static/icons/rouble.svg" alt="">
+                    <h1>Рубль</h1>
+                </li>
+                <li class="header__menu-language">
+                    <h1>Ru</h1>
+                </li>
+                <li class="header__menu-support">
+                    <h1 class="menu__support-telephone">8 800 500-61-05</h1>
+                    <h1 class="menu__support-text">Круглосуточная поддержка</h1>
+                </li>
+            </ul>
+        </div>
+        <div class="header__banner">
+            <img class="header__banner-img" src="static/logo.png" alt="">
+            <h2 class="header__banner-subtext">Морские прогулки</h2>
+            <h1 class="header__banner-text">ПО ЧЁРНОМУ МОРЮ</h1>
+            <button class="header__banner-btn" type="submit">Выбрать круиз</button>
+            <img class="header__banner-line" src="static/line.png" alt="">
+        </div>
+    </header>
+    <main class="main">
+        <div class="main__catalog">
+            <h1 class="main__catalog-text">Каталог круизов</h1>
+            <ul class="main__catalog-sorting">
+                <li>Сортировать круизы по цене</li>
+            </ul>
+            <div class="main__catalog-grid">
+                <div class="main__catalog-featureditem ">
+                    <img class="catalog__grid-image" src="static/cruises/anapa.png" alt="Круиз">
+                    <div class="catalog__grid-content">
+                        <h1 class="catalog__grid-title">Морской круиз в Анапу</h1>
+                        <p class="catalog__grid-route"><strong>Маршрут</strong>: Сочи-Лазаревское-Геленджик-Анапа</p>
+                        <p class="catalog__grid-duration"><strong>Продолжительность</strong>: 10 ч. 0 мин.</p>
+                        <p class="catalog__grid-price">49 000 руб.</p>
+                    </div>
+                </div>
+                <div class="main__catalog-item ">
+                    <img class="catalog__grid-image" src="static/cruises/sea_excursion.png" alt="Круиз">
+                    <div class="catalog__grid-content">
+                        <h1 class="catalog__grid-title">Обзорная морская прогулка с экскурсией</h1>
+                        <p class="catalog__grid-route"><strong>Маршрут</strong>: Сочи-Адлер-Сочи (без высадки)</p>
+                        <p class="catalog__grid-duration"><strong>Продолжительность</strong>: 1 ч. 0 мин.</p>
+                        <p class="catalog__grid-price">5 000 руб.</p>
+                    </div>
+                </div>
+                <div class="main__catalog-item ">
+                    <img class="catalog__grid-image" src="static/cruises/gelendzhik.png" alt="Круиз">
+                    <div class="catalog__grid-content">
+                        <h1 class="catalog__grid-title">Морская прогулка в Геленджик</h1>
+                        <p class="catalog__grid-route"><strong>Маршрут</strong>: Сочи-Туапсе-Геленджик</p>
+                        <p class="catalog__grid-duration"><strong>Продолжительность</strong>: 12 ч. 30 мин.</p>
+                        <p class="catalog__grid-price">5 000 руб.</p>
+                    </div>
+                </div>
+                <div class="main__catalog-item ">
+                    <img class="catalog__grid-image" src="static/cruises/novorossiysk.png" alt="Круиз">
+                    <div class="catalog__grid-content">
+                        <h1 class="catalog__grid-title">Морской круиз в Новороссийск</h1>
+                        <p class="catalog__grid-route"><strong>Маршрут</strong>: Сочи-Геленджик-Новороссйиск-Геленджик-Сочи</p>
+                        <p class="catalog__grid-duration"><strong>Продолжительность</strong>: 13 ч. 0 мин.</p>
+                        <p class="catalog__grid-price">14 800 руб.</p>
+                    </div>
+                </div>
+                <div class="main__catalog-item ">
+                    <img class="catalog__grid-image" src="static/cruises/abrau-dyurso.png" alt="Круиз">
+                    <div class="catalog__grid-content">
+                        <h1 class="catalog__grid-title">Морская прогулка в Абрау-Дюрсо</h1>
+                        <p class="catalog__grid-route"><strong>Маршрут</strong>: Сочи-Абрау-Дюрсо</p>
+                        <p class="catalog__grid-duration"><strong>Продолжительность</strong>: 11 ч. 0 мин.</p>
+                        <p class="catalog__grid-price">14 800 руб.</p>
+                    </div>
+                </div>
+            </div>
+            <button class="main__catalog-btn" type="submit">Выбрать круиз</button>
+        </div>
+    </main>
+    <footer class="footer">
+        <div class="footer__info">
+            <p class="footer__info-partners">Вход для партеров</p>
+            <p class="footer__info-about">О компании</p>
+            <p class="footer__info-contacts">Контакты</p>
+        </div>
+        <div class="footer__social">
+            <p class="footer__social-connect">Будь на связи:</p>
+            <div class="footer__social-media">
+                <img class="social__media-img" src="static/icons/vk.svg" alt="">
+                <img class="social__media-img" src="static/icons/odnoklassniki-square.svg" alt="">
+                <img class="social__media-img" src="static/icons/youtube-square.svg" alt="">
+                <img class="social__media-img" src="static/icons/instagram.svg" alt="">
+            </div>
+        </div>
+        <div class="footer__support">
+            <p class="footer__support-number">8 800 500-61-05</p>
+            <p class="footer__support-text">Круглосуточная поддержка</p>
+            <p class="footer__support-subtext">© 2016 OOO «Городские Круизы»</p>
+        </div>
+    </footer>
+</body>
+
+</html>
