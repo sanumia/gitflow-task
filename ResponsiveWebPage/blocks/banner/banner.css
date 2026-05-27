@@ -1,6 +1,7 @@
 .header__banner
 { 
-    font-family: 'Roboto Slab', serif;  font-size: 36px;  
+    font-family: 'Roboto Slab', serif;  
+    font-size: 36px;  
     font-weight: 100; 
 
     display: flex;  
@@ -26,17 +27,6 @@
     color: #0d3351;
 }
 
-.header__banner-btn
-{ 
-    width: 202px;  
-    height: 47px; 
-    margin-top: 40px;  
-    margin-bottom: 18px;  
-    color: #fff;
-    border: none;  
-    background-color: #33c7fd; 
-}
-
 .header__banner-line
 {
     position: absolute;
@@ -47,7 +37,7 @@
     transform: translateX(-50%); 
 }
 
-@media(max-width:1300px)
+@media(max-width:1024px)
 {
     .header__banner-text
     {
@@ -60,7 +50,7 @@
     }
 }
 
-@media(max-width:320px)
+@media(max-width:768px)
 {
     .header__banner-text
     {

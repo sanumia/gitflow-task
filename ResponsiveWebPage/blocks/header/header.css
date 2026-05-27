@@ -18,7 +18,13 @@
 
 .header__menu img
 {
-    width: 16px;  margin-right: 6px;
+    width: 16px;  
+    margin-right: 6px;
+}
+
+.header__menu a {
+    text-decoration: none;      
+    color: #0d3351;             
 }
 
 .header__toggle
@@ -28,7 +34,8 @@
 
 .header__menu
 { 
-    font-size: 7px;
+    font-size: 14px;
+    font-weight: 500;
     display: flex;  
     align-items: center; 
 
@@ -46,7 +53,7 @@
     display: block;
 }
 
-@media (max-width: 320px)
+@media (max-width: 768px)
 {
     .header__burger
     {

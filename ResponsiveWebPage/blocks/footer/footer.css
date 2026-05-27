@@ -5,9 +5,22 @@
     padding-top: 33px;  
     padding-bottom: 33px;
     background-color: #ffff; 
+    color: #0d3351;    
+    font-family: 'Raleway', serif;  
+    font-weight: 300;
+
 }
 
-@media(max-width:320px)
+.footer__info{
+    display: flex;
+    flex-direction: column;
+}
+
+.footer__info a {
+    text-decoration: none;      
+}
+
+@media(max-width:768px)
 {
     .footer
     {

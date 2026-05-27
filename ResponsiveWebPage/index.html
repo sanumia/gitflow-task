@@ -18,26 +18,40 @@
             <ul class="header__menu">
                 <li class="header__menu-account">
                     <img src="static/icons/user.svg" alt="">
-                    <h1>Личный кабинет</h1>
+                    <ul>
+                        <li>
+                            <a href="#">Личный кабинет</a>
+                        </li>
+                    </ul>
                 </li>
                 <li class="header__menu-rub">
                     <img src="static/icons/rouble.svg" alt="">
-                    <h1>Рубль</h1>
+                    <ul>
+                        <li>
+                            <a href="#">Рубль</a>
+                        </li>
+                    </ul>
                 </li>
                 <li class="header__menu-language">
-                    <h1>Ru</h1>
+                    <ul>
+                        <li>
+                            <a href="#">Ru</a>
+                        </li>
+                    </ul>
                 </li>
                 <li class="header__menu-support">
-                    <h1 class="menu__support-telephone">8 800 500-61-05</h1>
-                    <h1 class="menu__support-text">Круглосуточная поддержка</h1>
+                    <a class="menu__support-telephone" href="#">8 800 500-61-05</a>
+                    <p class="menu__support-text">Круглосуточная поддержка</p>
                 </li>
             </ul>
         </div>
         <div class="header__banner">
-            <img class="header__banner-img" src="static/logo.png" alt="">
+            <img class="header__banner-img" src="static/logo.png" alt="
+            
+            ">
             <h2 class="header__banner-subtext">Морские прогулки</h2>
             <h1 class="header__banner-text">ПО ЧЁРНОМУ МОРЮ</h1>
-            <button class="header__banner-btn" type="submit">Выбрать круиз</button>
+            <button class="header__banner-btn" type="button">Выбрать круиз</button>
             <img class="header__banner-line" src="static/line.png" alt="">
         </div>
     </header>
@@ -49,7 +63,7 @@
             </ul>
             <div class="main__catalog-grid">
                 <div class="main__catalog-featureditem ">
-                    <img class="catalog__grid-image" src="static/cruises/anapa.png" alt="Круиз">
+                    <img class="catalog__grid-image" src="static/cruises/anapa.png" alt="Морской круиз в Анапу">
                     <div class="catalog__grid-content">
                         <h1 class="catalog__grid-title">Морской круиз в Анапу</h1>
                         <p class="catalog__grid-route"><strong>Маршрут</strong>: Сочи-Лазаревское-Геленджик-Анапа</p>
@@ -58,7 +72,7 @@
                     </div>
                 </div>
                 <div class="main__catalog-item ">
-                    <img class="catalog__grid-image" src="static/cruises/sea_excursion.png" alt="Круиз">
+                    <img class="catalog__grid-image" src="static/cruises/sea_excursion.png" alt="Обзорная морская прогулка с экскурсией">
                     <div class="catalog__grid-content">
                         <h1 class="catalog__grid-title">Обзорная морская прогулка с экскурсией</h1>
                         <p class="catalog__grid-route"><strong>Маршрут</strong>: Сочи-Адлер-Сочи (без высадки)</p>
@@ -67,7 +81,7 @@
                     </div>
                 </div>
                 <div class="main__catalog-item ">
-                    <img class="catalog__grid-image" src="static/cruises/gelendzhik.png" alt="Круиз">
+                    <img class="catalog__grid-image" src="static/cruises/gelendzhik.png" alt="Морская прогулка в Геленджик">
                     <div class="catalog__grid-content">
                         <h1 class="catalog__grid-title">Морская прогулка в Геленджик</h1>
                         <p class="catalog__grid-route"><strong>Маршрут</strong>: Сочи-Туапсе-Геленджик</p>
@@ -76,7 +90,7 @@
                     </div>
                 </div>
                 <div class="main__catalog-item ">
-                    <img class="catalog__grid-image" src="static/cruises/novorossiysk.png" alt="Круиз">
+                    <img class="catalog__grid-image" src="static/cruises/novorossiysk.png" alt="Морской круиз в Новороссийск">
                     <div class="catalog__grid-content">
                         <h1 class="catalog__grid-title">Морской круиз в Новороссийск</h1>
                         <p class="catalog__grid-route"><strong>Маршрут</strong>: Сочи-Геленджик-Новороссйиск-Геленджик-Сочи</p>
@@ -85,7 +99,7 @@
                     </div>
                 </div>
                 <div class="main__catalog-item ">
-                    <img class="catalog__grid-image" src="static/cruises/abrau-dyurso.png" alt="Круиз">
+                    <img class="catalog__grid-image" src="static/cruises/abrau-dyurso.png" alt="Морская прогулка в Абрау-Дюрсо">
                     <div class="catalog__grid-content">
                         <h1 class="catalog__grid-title">Морская прогулка в Абрау-Дюрсо</h1>
                         <p class="catalog__grid-route"><strong>Маршрут</strong>: Сочи-Абрау-Дюрсо</p>
@@ -94,22 +108,22 @@
                     </div>
                 </div>
             </div>
-            <button class="main__catalog-btn" type="submit">Выбрать круиз</button>
+            <button class="main__catalog-btn" type="button">Выбрать круиз</button>
         </div>
     </main>
     <footer class="footer">
         <div class="footer__info">
-            <p class="footer__info-partners">Вход для партеров</p>
-            <p class="footer__info-about">О компании</p>
-            <p class="footer__info-contacts">Контакты</p>
+            <a class="footer__info-partners" href="#">Вход для партнеров</a>
+            <a class="footer__info-about" href="#">О компании</a>
+            <a class="footer__info-contacts" href="#">Контакты</a>
         </div>
         <div class="footer__social">
             <p class="footer__social-connect">Будь на связи:</p>
             <div class="footer__social-media">
-                <img class="social__media-img" src="static/icons/vk.svg" alt="">
-                <img class="social__media-img" src="static/icons/odnoklassniki-square.svg" alt="">
-                <img class="social__media-img" src="static/icons/youtube-square.svg" alt="">
-                <img class="social__media-img" src="static/icons/instagram.svg" alt="">
+                <img class="social__media-img" src="static/icons/vk.svg" alt="ВКонтакте">
+                <img class="social__media-img" src="static/icons/odnoklassniki-square.svg" alt="Одноклассники">
+                <img class="social__media-img" src="static/icons/youtube-square.svg" alt="YouTube">
+                <img class="social__media-img" src="static/icons/instagram.svg" alt="Instagram">
             </div>
         </div>
         <div class="footer__support">
