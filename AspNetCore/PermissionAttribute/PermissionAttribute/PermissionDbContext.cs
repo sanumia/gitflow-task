@@ -6,6 +6,5 @@ namespace PermissionAttribute;
 
 public class PermissionDbContext(DbContextOptions<PermissionDbContext> options) : IdentityDbContext(options)
 {
-    public DbSet<Contact>  Contacts { get; set; }
-
+    public DbSet<Contact> Contacts { get; set; }
 }

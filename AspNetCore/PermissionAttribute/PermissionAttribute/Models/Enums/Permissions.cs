@@ -2,9 +2,9 @@
 
 public enum Permissions
 {
-    GetProfileById,
-    GetProfiles,
-    AddProfile,
-    UpdateProfile,
-    DeleteProfile
+    GetContactById,
+    GetContacts,
+    AddContact,
+    UpdateContact,
+    DeleteContact
 }

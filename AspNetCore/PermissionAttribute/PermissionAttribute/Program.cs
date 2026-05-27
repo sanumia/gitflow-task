@@ -56,10 +56,10 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
+    var configuration = services.GetRequiredService<IConfiguration>();
+    var adminPassword = configuration["AdminPassword"];
 
-    await SeedData.Initialize(
-        services,
-        "Pa$$w0rd");
+    await SeedData.Initialize(services, adminPassword);
 }
 
 app.UseHttpsRedirection();

@@ -9,12 +9,13 @@ public class PermissionRequirement(string permission) : IAuthorizationRequiremen
 
 public class PermissionHandler : AuthorizationHandler<PermissionRequirement>
 {
+    private const string Permission = "Permission";
     protected override Task HandleRequirementAsync(
         AuthorizationHandlerContext context,
         PermissionRequirement requirement)
     {
         var hasClaim = context.User.Claims.Any(c =>
-            c.Type == "Permission" &&
+            c.Type == Permission &&
             c.Value == requirement.Permission);
 
         if (hasClaim)

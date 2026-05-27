@@ -485,3 +485,4 @@ $RECYCLE.BIN/
 *.swp
 wwwroot/lib/
 wwwroot/lib/**
+appsettings.Development.json

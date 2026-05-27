@@ -7,27 +7,32 @@ namespace PermissionAttribute;
 
 public class SeedData
 {
-    public static async Task Initialize(IServiceProvider sp, string password)
+    private const string DuplicateUserNameErrorCode = "DuplicateUserName";
+    private const string PermissionClaimType = "Permission";
+    private const string AdminEmail = "admin@contoso.com";
+    private const string ManagerEmail = "manager@contoso.com";
+
+    public static async Task Initialize(IServiceProvider serviceProvider, string adminPassword)
     {
-        var userManager = sp.GetRequiredService<UserManager<IdentityUser>>();
-        var roleManager = sp.GetRequiredService<RoleManager<IdentityRole>>();
-        var context = sp.GetRequiredService<PermissionDbContext>();
+        var userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
+        var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+        var dbContext = serviceProvider.GetRequiredService<PermissionDbContext>();
 
-        await context.Database.EnsureCreatedAsync();
+        await dbContext.Database.EnsureCreatedAsync();
 
-        await EnsureRole(roleManager, Roles.Admin.ToString());
-        await EnsureRole(roleManager, Roles.Manager.ToString());
+        await EnsureRoleAsync(roleManager, Roles.Admin.ToString());
+        await EnsureRoleAsync(roleManager, Roles.Manager.ToString());
 
-        await AssignPermissionsToRole(roleManager, Roles.Admin, GetAllPermissions());
-        await AssignPermissionsToRole(roleManager, Roles.Manager, GetManagerPermissions());
+        await AssignPermissionsToRoleAsync(roleManager, Roles.Admin, GetAllPermissions());
+        await AssignPermissionsToRoleAsync(roleManager, Roles.Manager, GetManagerPermissions());
 
-        var admin = await EnsureUser(userManager, password, "admin@contoso.com");
-        var manager = await EnsureUser(userManager, password, "manager@contoso.com");
+        var adminUser = await EnsureUserAsync(userManager, adminPassword, AdminEmail);
+        var managerUser = await EnsureUserAsync(userManager, adminPassword, ManagerEmail);
 
-        await userManager.AddToRoleAsync(admin, Roles.Admin.ToString());
-        await userManager.AddToRoleAsync(manager, Roles.Manager.ToString());
+        await userManager.AddToRoleAsync(adminUser, Roles.Admin.ToString());
+        await userManager.AddToRoleAsync(managerUser, Roles.Manager.ToString());
 
-        SeedDB(context, admin.Id);
+        await SeedContactsAsync(dbContext, adminUser.Id);
     }
 
     private static List<Permissions> GetAllPermissions()
@@ -39,48 +44,61 @@ public class SeedData
     {
         return new List<Permissions>
         {
-            Permissions.GetProfileById,
-            Permissions.GetProfiles,
-            Permissions.AddProfile,
-            Permissions.UpdateProfile
+            Permissions.GetContactById,
+            Permissions.GetContacts,
+            Permissions.AddContact,
+            Permissions.UpdateContact
         };
     }
 
-    private static async Task AssignPermissionsToRole(
+    private static async Task AssignPermissionsToRoleAsync(
         RoleManager<IdentityRole> roleManager,
         Roles role,
         List<Permissions> permissions)
     {
-        var identityRole = await roleManager.FindByNameAsync(role.ToString());
-        if (identityRole == null)
-            throw new Exception($"Role '{role}' not found");
+        var roleName = role.ToString();
+        var identityRole = await roleManager.FindByNameAsync(roleName);
+
+        if (identityRole is null)
+        {
+            throw new InvalidOperationException(
+                $"Role '{roleName}' not found. Ensure the role is created before assigning permissions.");
+        }
 
         var existingClaims = await roleManager.GetClaimsAsync(identityRole);
 
-        foreach (var perm in permissions)
+        foreach (var permission in permissions)
         {
-            var claimValue = perm.ToString();
-            if (!existingClaims.Any(c => c.Type == "Permission" && c.Value == claimValue))
+            var claimValue = permission.ToString();
+            bool claimAlreadyExists = existingClaims.Any(c =>
+                c.Type == PermissionClaimType && c.Value == claimValue);
+
+            if (!claimAlreadyExists)
             {
-                await roleManager.AddClaimAsync(identityRole, new Claim("Permission", claimValue));
+                await roleManager.AddClaimAsync(identityRole, new Claim(PermissionClaimType, claimValue));
             }
         }
     }
 
-    private static async Task EnsureRole(RoleManager<IdentityRole> roleManager, string roleName)
+    private static async Task EnsureRoleAsync(RoleManager<IdentityRole> roleManager, string roleName)
     {
-        if (!await roleManager.RoleExistsAsync(roleName))
+        bool roleExists = await roleManager.RoleExistsAsync(roleName);
+        if (!roleExists)
+        {
             await roleManager.CreateAsync(new IdentityRole(roleName));
+        }
     }
 
-    private static async Task<IdentityUser> EnsureUser(
+    private static async Task<IdentityUser> EnsureUserAsync(
         UserManager<IdentityUser> userManager,
         string password,
         string email)
     {
         var user = await userManager.FindByNameAsync(email);
-        if (user != null)
+        if (user is not null)
+        {
             return user;
+        }
 
         user = new IdentityUser
         {
@@ -89,24 +107,43 @@ public class SeedData
             EmailConfirmed = true
         };
 
-        var result = await userManager.CreateAsync(user, password);
-        if (result.Succeeded)
+        var creationResult = await userManager.CreateAsync(user, password);
+
+        if (creationResult.Succeeded)
+        {
             return user;
-        if (result.Errors.Any(e => e.Code == "DuplicateUserName"))
+        }
+
+        bool isDuplicate = creationResult.Errors.Any(e => e.Code == DuplicateUserNameErrorCode);
+        if (isDuplicate)
         {
             user = await userManager.FindByNameAsync(email);
-            if (user != null)
+            if (user is not null)
+            {
                 return user;
+            }
         }
-        var errors = string.Join("; ", result.Errors.Select(e => $"{e.Code}: {e.Description}"));
-        throw new Exception($"User creation failed for {email}: {errors}");
+
+        var errors = string.Join("; ", creationResult.Errors.Select(e => $"{e.Code}: {e.Description}"));
+        throw new InvalidOperationException($"User creation failed for {email}: {errors}");
     }
 
-    public static void SeedDB(PermissionDbContext context, string adminID)
+    private static async Task SeedContactsAsync(PermissionDbContext dbContext, string ownerId)
     {
-        if (context.Contacts.Any()) return;
+        if (dbContext.Contacts.Any())
+        {
+            return;
+        }
 
-        context.Contacts.AddRange(
+        var contacts = GetSampleContacts(ownerId);
+        await dbContext.Contacts.AddRangeAsync(contacts);
+        await dbContext.SaveChangesAsync();
+    }
+
+    private static IEnumerable<Contact> GetSampleContacts(string ownerId)
+    {
+        return new List<Contact>
+        {
             new Contact
             {
                 Name = "Debra Garcia",
@@ -116,7 +153,7 @@ public class SeedData
                 Zip = "10999",
                 Email = "debra@example.com",
                 Status = ContactStatus.Approved,
-                OwnerID = adminID
+                OwnerID = ownerId
             },
             new Contact
             {
@@ -127,7 +164,7 @@ public class SeedData
                 Zip = "10999",
                 Email = "thorsten@example.com",
                 Status = ContactStatus.Submitted,
-                OwnerID = adminID
+                OwnerID = ownerId
             },
             new Contact
             {
@@ -138,7 +175,7 @@ public class SeedData
                 Zip = "10999",
                 Email = "yuhong@example.com",
                 Status = ContactStatus.Rejected,
-                OwnerID = adminID
+                OwnerID = ownerId
             },
             new Contact
             {
@@ -149,7 +186,7 @@ public class SeedData
                 Zip = "10999",
                 Email = "jon@example.com",
                 Status = ContactStatus.Submitted,
-                OwnerID = adminID
+                OwnerID = ownerId
             },
             new Contact
             {
@@ -159,9 +196,8 @@ public class SeedData
                 State = "WA",
                 Zip = "10999",
                 Email = "diliana@example.com",
-                OwnerID = adminID
+                OwnerID = ownerId
             }
-        );
-        context.SaveChanges();
+        };
     }
 }
