@@ -102,11 +102,13 @@
     {
         grid-row: auto;
     }
+
     .main__catalog-item,
     .main__catalog-featureditem
     {
         width: 345px;
     }
+
     .catalog__grid-image
     {
         width: 100%;  
@@ -121,19 +123,23 @@
     {
         margin-top: 150px;
     }
+
     .main__catalog-grid
     {
         grid-template-columns: 1fr;  justify-items: center;
     }
+
     .main__catalog-featureditem
     {
         grid-row: auto;
     }
+
     .main__catalog-item,
     .main__catalog-featureditem
     {
         width: 290px;
     }
+    
     .catalog__grid-image
     {
         width: 100%;  

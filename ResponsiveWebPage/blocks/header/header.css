@@ -1,6 +1,8 @@
 .header
-{ position: relative;
- display: flex;  flex-direction: column; 
+{ 
+    position: relative;
+    display: flex;  
+    flex-direction: column; 
 
     background: url('../../static/sochi.png') no-repeat center center;  
     background-size: cover; 
@@ -23,6 +25,7 @@
 {
     display: none;
 }
+
 .header__menu
 { 
     font-size: 7px;
@@ -32,21 +35,24 @@
     list-style: none;  
     gap: 60px; 
 }
+
 .header__menu li
 {
     display: flex;
 }
+
 .header__menu .header__menu-support
 {
     display: block;
 }
 
-@media (max-width: 720px)
+@media (max-width: 320px)
 {
     .header__burger
     {
         display: block;
     }
+
     .header__menu
     { 
         position: absolute;  
@@ -59,6 +65,7 @@
         padding: 20px;
         background: #ffff; 
     }
+
     .header__toggle:checked ~ .header__menu
     {
         display: flex;
