@@ -1,17 +1,22 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.EntityFrameworkCore;
 using PermissionAttribute.Models;
 using PermissionAttribute.Models.Enums;
+using System.Security.Claims;
 
 namespace PermissionAttribute.Services;
 
-public class ContactService(PermissionDbContext context) : IContactService
+public class ContactService(PermissionDbContext context, IMapper mapper) : IContactService
 {
     public async Task<IEnumerable<Contact>> GetContactsAsync(string userId, string? userRole)
     {
         var query = context.Contacts.AsQueryable();
 
-        // Business rule: Managers see all, ordinary users see only their own
-        if (userRole != Roles.Admin.ToString() && userRole != Roles.Manager.ToString())
+        bool isAdminOrManager = userRole == Roles.Admin.ToString() || userRole == Roles.Manager.ToString();
+
+        if (!isAdminOrManager)
         {
             query = query.Where(c => c.OwnerID == userId);
         }
@@ -24,8 +29,11 @@ public class ContactService(PermissionDbContext context) : IContactService
         var contact = await context.Contacts.FindAsync(id);
         if (contact == null) return null;
 
-        // Permission check: only owner or Admin/Manager can view
-        if (contact.OwnerID != userId && userRole != Roles.Admin.ToString() && userRole != Roles.Manager.ToString())
+        bool isOwner = contact.OwnerID == userId;
+        bool isAdminOrManager = userRole == Roles.Admin.ToString() || userRole == Roles.Manager.ToString();
+        bool canView = isOwner || isAdminOrManager;
+
+        if (!canView)
             return null;
 
         return contact;
@@ -34,7 +42,7 @@ public class ContactService(PermissionDbContext context) : IContactService
     public async Task<Contact> CreateContactAsync(Contact contact, string userId)
     {
         contact.OwnerID = userId;
-        contact.Status = ContactStatus.Submitted; // default status
+        contact.Status = ContactStatus.Submitted;
         context.Contacts.Add(contact);
         await context.SaveChangesAsync();
         return contact;
@@ -45,17 +53,13 @@ public class ContactService(PermissionDbContext context) : IContactService
         var existing = await context.Contacts.FindAsync(contact.ContactId);
         if (existing == null) return false;
 
-        // Permission check: only owner, Admin, or Manager can update
-        if (existing.OwnerID != userId && userRole != Roles.Admin.ToString() && userRole != Roles.Manager.ToString())
-            return false;
+        bool isOwner = existing.OwnerID == userId;
+        bool isAdminOrManager = userRole == Roles.Admin.ToString() || userRole == Roles.Manager.ToString();
+        bool canUpdate = isOwner || isAdminOrManager;
 
-        existing.Name = contact.Name;
-        existing.Address = contact.Address;
-        existing.City = contact.City;
-        existing.State = contact.State;
-        existing.Zip = contact.Zip;
-        existing.Email = contact.Email;
-        existing.Status = contact.Status;
+        if (!canUpdate) return false;
+
+        mapper.Map(contact, existing);
 
         await context.SaveChangesAsync();
         return true;
@@ -66,8 +70,11 @@ public class ContactService(PermissionDbContext context) : IContactService
         var contact = await context.Contacts.FindAsync(id);
         if (contact == null) return false;
 
-        // Only Admin or the owner can delete
-        if (contact.OwnerID != userId && userRole != Roles.Admin.ToString())
+        bool isOwner = contact.OwnerID == userId;
+        bool isAdmin = userRole == Roles.Admin.ToString();
+        bool canDelete = isOwner || isAdmin;
+
+        if (!canDelete)
             return false;
 
         context.Contacts.Remove(contact);

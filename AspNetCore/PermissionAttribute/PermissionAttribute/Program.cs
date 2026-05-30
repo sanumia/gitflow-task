@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using PermissionAttribute;
 using PermissionAttribute.Handlers;
 using PermissionAttribute.Models.Enums;
+using PermissionAttribute.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,7 +38,11 @@ builder.Services.AddRazorPages(options =>
         "Identity",
         "/Account/AccessDenied");
 });
+builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddSingleton<IAuthorizationHandler, PermissionHandler>();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+builder.Services.AddScoped<IContactService, ContactService>();
 
 builder.Services.AddAuthorization(options =>
 {
