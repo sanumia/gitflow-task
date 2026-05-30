@@ -32,31 +32,23 @@ public class ProfileService : IProfileService
     public bool Update(Profile profile)
     {
         var existing = GetById(profile.Id);
-        if (existing != null)
-        {
-            existing.Name = profile.Name;
-            existing.Email = profile.Email;
-            return true;
-        }
-        else
-        {
+        if (existing == null)
             return false;
-        }
 
+        existing.Name = profile.Name;
+        existing.Email = profile.Email;
+
+        return true;
     }
 
     public bool Delete(int id)
     {
         var profile = GetById(id);
-        if (profile != null)
-        {
-            _profiles.Remove(profile);
-
-            return true;
-        }
-        else
-        {
+        if (profile == null)
             return false;
-        }
+
+        _profiles.Remove(profile);
+
+        return true;
     }
 }

@@ -12,6 +12,7 @@ public class ProfileController(IProfileService service) : ControllerBase
     public ActionResult<Profile> GetById(int id)
     {
         var profile = service.GetById(id);
+
         return profile is null
             ? NotFound()
             : Ok(profile);
