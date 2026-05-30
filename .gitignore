@@ -481,5 +481,7 @@ $RECYCLE.BIN/
 # Vim temporary swap files
 *.swp
 
-postman/
-.postman/
+/postman
+/.postman
+wwwroot/lib/
+wwwroot/lib/**

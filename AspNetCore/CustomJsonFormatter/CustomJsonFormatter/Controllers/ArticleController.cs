@@ -19,6 +19,7 @@ public class ArticleController(IArticleService articleService) : ControllerBase
         [FromQuery] int pageSize = PaginationConstants.DefaultPageSize)
     {
         var result = await articleService.GetPagedArticlesAsync(pageNumber, pageSize);
+
         return Ok(result);
     }
 
@@ -26,6 +27,7 @@ public class ArticleController(IArticleService articleService) : ControllerBase
     public async Task<ActionResult<ArticleDto>> GetArticleById(int id)
     {
         var article = await articleService.GetArticleByIdAsync(id);
+
         return article is null ? NotFound() : Ok(article);
     }
 }
