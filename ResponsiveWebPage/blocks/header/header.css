@@ -1,0 +1,80 @@
+.header
+{ 
+    position: relative;
+    display: flex;  
+    flex-direction: column; 
+
+    background: url('../../static/sochi.png') no-repeat center center;  
+    background-size: cover; 
+}
+
+.header__top
+{
+    display: flex;  
+    align-items: center;  
+    justify-content: space-between;  
+    padding: 20px 40px;
+}
+
+.header__menu img
+{
+    width: 16px;  
+    margin-right: 6px;
+}
+
+.header__menu a {
+    text-decoration: none;      
+    color: #0d3351;             
+}
+
+.header__toggle
+{
+    display: none;
+}
+
+.header__menu
+{ 
+    font-size: 14px;
+    font-weight: 500;
+    display: flex;  
+    align-items: center; 
+
+    list-style: none;  
+    gap: 60px; 
+}
+
+.header__menu li
+{
+    display: flex;
+}
+
+.header__menu .header__menu-support
+{
+    display: block;
+}
+
+@media (max-width: 768px)
+{
+    .header__burger
+    {
+        display: block;
+    }
+
+    .header__menu
+    { 
+        position: absolute;  
+        top: 60px;  
+        left: 0; 
+
+        display: none;  
+        flex-direction: column;  
+        width: 100%;  
+        padding: 20px;
+        background: #ffff; 
+    }
+
+    .header__toggle:checked ~ .header__menu
+    {
+        display: flex;
+    }
+}

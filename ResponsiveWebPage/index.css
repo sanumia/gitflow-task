@@ -1,0 +1,8 @@
+
+@import url('blocks/common/global.css');
+@import url('blocks/common/reset.css');
+
+@import url('blocks/header/header.css');
+@import url('blocks/banner/banner.css');
+@import url('blocks/catalog/catalog.css');
+@import url('blocks/footer/footer.css');

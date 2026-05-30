@@ -1,0 +1,45 @@
+.footer
+{
+    display: flex;  
+    justify-content: space-around;  
+    padding-top: 33px;  
+    padding-bottom: 33px;
+    background-color: #ffff; 
+    color: #0d3351;    
+    font-family: 'Raleway', serif;  
+    font-weight: 300;
+
+}
+
+.footer__info{
+    display: flex;
+    flex-direction: column;
+}
+
+.footer__info-partners,
+.footer__info-about,
+.footer__info-contacts {
+    text-decoration: none;
+}
+
+@media(max-width:768px)
+{
+    .footer
+    {
+        display: flex;  
+        align-items: center;
+        flex-direction: column; 
+    }
+
+    .footer__info
+    {
+        display: none;
+    }
+
+    .footer__support
+    {
+        display: flex;  
+        align-items: center;
+        flex-direction: column; 
+    }
+}

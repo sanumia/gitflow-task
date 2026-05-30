@@ -1,0 +1,137 @@
+.main__catalog
+{
+    display: flex;  
+    align-items: center;  
+    flex-direction: column;  
+    justify-content: center;  
+    margin-top: 120px;
+}
+
+.main__catalog-text
+{
+    font-size: 34px;  
+    font-weight: 400;  
+    color: #0d3351;
+}
+
+.main__catalog-sorting
+{ 
+    font-family: 'Raleway'; 
+    font-size: 14px;  
+    font-weight: 300;  
+    margin-bottom: 42px;
+    list-style: none; 
+    color: #0d3351; 
+}
+
+.main__catalog-grid
+{
+    display: grid;  
+    grid-template-columns: repeat(2, 1fr);  
+    gap: 30px;
+}
+
+.main__catalog-featureditem
+{ 
+    background-color: #ffff;
+
+    grid-row: span 2; 
+}
+
+.main__catalog-item
+{
+    background-color: #ffff;
+}
+
+.catalog__grid-content
+{
+    padding-left: 38px;
+}
+
+.catalog__grid-title
+{ 
+    font-size: 18px; 
+
+    margin-top: 29px;  
+    margin-bottom: 18px;  
+    color: #00a2dd;
+}
+
+.catalog__grid-route,
+.catalog__grid-duration
+{ 
+    font-family: 'Raleway'; 
+    font-size: 14px;  
+    font-weight: 200;  
+    color: #0d3351;
+}
+
+.catalog__grid-price
+{ 
+    font-size: 30px;  
+    font-weight: 400; 
+
+    margin-top: 23px;  
+    margin-bottom: 38px;  
+    color: #0d3351;
+}
+
+.catalog__grid-image
+{ 
+    display: block;
+
+    width: 100%;  
+    height: auto; 
+}
+
+@media (max-width: 1024px)
+{
+    .main__catalog-featureditem
+    {
+        grid-row: auto;
+    }
+
+    .main__catalog-item,
+    .main__catalog-featureditem
+    {
+        width: 345px;
+    }
+
+    .catalog__grid-image
+    {
+        width: 100%;  
+        height: 272px;  
+        object-fit: cover;
+    }
+}
+
+@media (max-width: 768px)
+{
+    .main__catalog
+    {
+        margin-top: 150px;
+    }
+
+    .main__catalog-grid
+    {
+        grid-template-columns: 1fr;  justify-items: center;
+    }
+
+    .main__catalog-featureditem
+    {
+        grid-row: auto;
+    }
+
+    .main__catalog-item,
+    .main__catalog-featureditem
+    {
+        width: 290px;
+    }
+    
+    .catalog__grid-image
+    {
+        width: 100%;  
+        height: 229px;  
+        object-fit: cover;
+    }
+}
