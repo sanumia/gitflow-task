@@ -16,8 +16,10 @@
     flex-direction: column;
 }
 
-.footer__info a {
-    text-decoration: none;      
+.footer__info-partners,
+.footer__info-about,
+.footer__info-contacts {
+    text-decoration: none;
 }
 
 @media(max-width:768px)
