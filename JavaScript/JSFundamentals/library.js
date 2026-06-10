@@ -44,11 +44,13 @@ function asChain(arr) {
 
         skip: function (n) {
             this._arr = skip(this._arr, n);
+
             return this;
         },
 
         take: function (n) {
             this._arr = take(this._arr, n);
+
             return this;
         },
 
@@ -68,4 +70,7 @@ console.log(isFunction(() => { }));
 console.log(isUndefined(undefined));
 console.log(isNull(null));
 
-console.log(asChain([1, 2, 3, 4, 5]).skip(1).take(3).value());
+console.log(asChain([1, 2, 3, 4, 5])
+                .skip(1)
+                .take(3)
+                .value());
