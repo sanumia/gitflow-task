@@ -1,20 +1,44 @@
-const Timer = (props) => {
+import {useState, useEffect} from 'react';
+function Timer(props) {
     const {
-        time,
-    } = props
+        id,
+        settings,
+        onComplete,
+        children,
+        isRunning,
+     } = props;
 
-    const formatTime = (totalSecs) => {
-        const mins = Math.floor(totalSecs / 60)
-        const secs = totalSecs % 60
-        
-        return `${mins.toString()} : ${secs.toString()}`
-    }
+    const SECONDS_PER_HOUR = 3600;
+    const SECONDS_PER_MINUTE = 60;
+
+    const [remaining, setRemaining] = useState(settings.duration);
+
+    useEffect(() =>{
+        if(remaining < 0) {
+            onComplete?.();
+            return;
+        }
+
+        if (!isRunning) {
+            return;
+        }
+
+        const interval = setInterval(() =>{
+            setRemaining(prev => prev -1);
+        }, 1000);
+
+        return () => clearInterval(interval);
+    }, [remaining, onComplete, isRunning]);
+    
+    const hours = Math.floor(remaining / SECONDS_PER_HOUR);
+    const minutes = Math.floor((remaining % SECONDS_PER_HOUR) / SECONDS_PER_MINUTE);
+    const seconds = remaining % SECONDS_PER_MINUTE;
 
     return (
-        <>
-        {formatTime(time)}
-        </>
-    )
+        <div id={id}>
+        {children(hours, minutes, seconds)}
+        </div>
+    );
 }
 
-export default Timer
+export default Timer;

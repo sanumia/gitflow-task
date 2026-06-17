@@ -1,48 +1,44 @@
-import Timer from "./Timer"
-import Button from "./Button"
-import {useState, useEffect, useRef} from 'react'
+import Timer from './Timer';
+import Button from './Button';
+import {useState} from 'react';
 
-const TimerForm = () => {
-    const [seconds, setSeconds] = useState(0)
+function TimerForm() {
     
-    const [isRunning, setIsRunning] = useState(false)
+    const [isRunning, setIsRunning] = useState(false);
+    const [resetKey, setResetKey] = useState(0);
 
-    const intervalRef = useRef(null) 
+    const handleStart = () => setIsRunning(true);
 
-    useEffect(() =>{
-        if(isRunning){
-            intervalRef.current = setInterval(() => {
-                setSeconds(prev => prev + 1);
-            }, 1000);
-        }
-        else{
-            if(intervalRef.current){
-                clearInterval(intervalRef.current)
-            }
-        }
-
-        return () => clearInterval(intervalRef.current);
-    }, [isRunning])
-
-    const handleStart = () => setIsRunning(true)
-
-    const handleStop = () => setIsRunning(false)
+    const handleStop = () => setIsRunning(false);
 
     const handleReset = () => {
-        setIsRunning(false)
-        setSeconds(0)
-    }
+        setIsRunning(false);
+        setResetKey(prev => prev + 1);
+    };
 
     return (
         <div>
-            <Timer time = {seconds}/>
+            <Timer
+                key={resetKey} // reset by remounting
+                settings={{ duration: 60 }} // example: 60 seconds
+                onComplete={() => alert('Time is up!')}
+                isRunning={isRunning} 
+            >
+                {(hours, minutes, seconds) => (
+                <span>
+                    {String(hours).padStart(2, '0')}:
+                    {String(minutes).padStart(2, '0')}:
+                    {String(seconds).padStart(2, '0')}
+                </span>
+            )}
+            </Timer>
             <div>
-                <Button onClick={handleStart}> Start </Button>
-                <Button onClick={handleStop}> Stop </Button>
-                <Button onClick={handleReset}> Reset </Button>
+                <Button onClick={handleStart}>Start</Button>
+                <Button onClick={handleStop}>Stop</Button>
+                <Button onClick={handleReset}>Reset</Button>
             </div>
         </div>
-    )
+    );
 }
 
-export default TimerForm
+export default TimerForm;

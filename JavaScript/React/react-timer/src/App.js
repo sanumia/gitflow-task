@@ -3,7 +3,7 @@ import TimerForm from './components/TimerForm';
 
 function App() {
   return (
-    <div className="App">
+    <div className="app">
       <TimerForm />
     </div>
   );

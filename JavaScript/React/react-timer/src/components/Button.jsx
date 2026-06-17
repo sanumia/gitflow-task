@@ -1,16 +1,5 @@
-const Button = (props) => {
-    const {
-        onClick,
-        children
-    } = props
-    
-    return (
-        <button
-            onClick = {onClick}
-        >
-            {children}
-        </button>
-    )
+function Button(props) {
+    return <button {...props}/>;
 }
 
-export default Button
+export default Button;
