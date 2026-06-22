@@ -1,46 +1,43 @@
-import {useState, useEffect} from 'react'
+import {useState, useEffect, useCallback} from 'react'
+import './ProgressBar.css';
+
 const ProgressBar = () => {
-    const [filled, setFilled] = useState(0)
+    const PROGRESS_COMPLETE = 100;
+
+
+    const [isFilled, setIsFilled] = useState(0)
     const [loading, setLoading] = useState(false)
 
     useEffect(() => {
-        if(filled < 100 && loading){
-            setTimeout(() => setFilled(prev => prev + 5), 50)
+        if(isFilled < PROGRESS_COMPLETE && loading){
+            setTimeout(() => setIsFilled(prev => prev + 5), 50)
         }
-    }, [filled, loading])
-    return (
-        <div style={{ 
-            display: 'flex', 
-            flexDirection: 'column', 
-            alignItems: 'center',  
-            gap: '10px',            
-            margin: 50 
-        }}>
-        <div 
-            className="progress-bar" 
-            style={{ 
-                width: '300px', 
-                height: '20px',
-                margin: 50,
-                backgroundColor: '#f0f0f0',
-                borderRadius: 40,
-                overflow: 'hidden'
-            }}  
-            >
-            <div style={{
-                height: "100%",
-                width: `${filled}%`,
-                backgroundColor: "#e075a5",
-                transition: "width 0.5s"
-            }} 
-            />
-        </div>
-            <span className="progress-bar__percentage">
-                {filled} %
-            </span>
-            <button className="btn text-white" onClick={() => { setLoading(true) }}> Start </button>
-        </div>
+    }, [isFilled, loading])
 
+    const handleStart = useCallback(() => {
+        setLoading(true);
+    }, []);
+
+
+    return (
+        <div className="progress-bar-container">
+            <div className="progress-bar">
+                <div
+                    className="progress-bar-fill"
+                    style={{ width: `${isFilled}%` }}
+                />
+            </div>
+            <span className="progress-bar__percentage">
+                {isFilled} %
+            </span>
+            <button 
+                className="btn text-white" 
+                onClick={handleStart}
+            > 
+                Start 
+            </button>
+        </div>
     )
 }
+
 export default ProgressBar
