@@ -2,36 +2,32 @@ import './App.css';
 import SearchInput from './components/SearchInput';
 import {SearchInputModes} from './components/SearchInputModes'
 
+const searchConfigs = [
+  { mode: SearchInputModes.IMMEDIATE, label: 'Immediate' },
+  { mode: SearchInputModes.ENTER, label: 'Enter' },
+  { mode: SearchInputModes.DEBOUNCE, label: 'Debounce', delay: 500 },
+];
+
 function App() {
   const handleSearch = (value) => {
     console.log('Searching:', value);
   };
-  
+
   return (
     <div>
-      <h2>Immediate</h2>
-      <SearchInput
-        placeholder="Search..."
-        mode={SearchInputModes.IMMEDIATE}
-        onSearch={handleSearch}
-      />
-
-      <h2>Enter</h2>
-      <SearchInput
-        placeholder="Search..."
-        mode={SearchInputModes.ENTER}
-        onSearch={handleSearch}
-      />
-
-      <h2>Debounce</h2>
-      <SearchInput
-        placeholder="Search..."
-        mode={SearchInputModes.DEBOUNCE}
-        delay={500}
-        onSearch={handleSearch}
-      />
+      {searchConfigs.map(({ mode, label, delay }) => (
+        <div key={mode}>
+          <h2>{label}</h2>
+          <SearchInput
+            placeholder="Search..."
+            mode={mode}
+            delay={delay}
+            onSearch={handleSearch}
+          />
+        </div>
+      ))}
     </div>
   );
-  }
+}
 
 export default App;
