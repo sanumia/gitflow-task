@@ -20,10 +20,10 @@ const ProgressBar = () => {
 
 
     return (
-        <div className="progress-bar-container">
-            <div className="progress-bar">
+        <div className="progress-bar__container">
+            <div className="progress-bar__bar">
                 <div
-                    className="progress-bar-fill"
+                    className="progress-bar__bar--fill"
                     style={{ width: `${isFilled}%` }}
                 />
             </div>
@@ -31,7 +31,7 @@ const ProgressBar = () => {
                 {isFilled} %
             </span>
             <button 
-                className="btn text-white" 
+                className="progress-bar__button btn text-white" 
                 onClick={handleStart}
             > 
                 Start 
