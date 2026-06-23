@@ -23,8 +23,7 @@ function SearchInput(props) {
 
     const handleKeyDown = useCallback((event) => {
         if (
-            mode === SearchInputModes.ENTER &&
-            event.key === 'Enter'
+            mode === SearchInputModes.ENTER && event.key === 'Enter'
         ) {
             console.log('Enter was pressed');
             onSearch(value);
