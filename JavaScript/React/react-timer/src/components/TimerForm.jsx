@@ -1,36 +1,39 @@
 import Timer from './Timer';
 import Button from './Button';
-import {useState} from 'react';
+import {useState, useCallback} from 'react';
+import {SECONDS_PER_MINUTE} from "../constants/timeConstants";
+
 
 function TimerForm() {
-    
     const [isRunning, setIsRunning] = useState(false);
     const [resetKey, setResetKey] = useState(0);
 
-    const handleStart = () => setIsRunning(true);
+    const handleStart = useCallback(() => setIsRunning(true));
 
-    const handleStop = () => setIsRunning(false);
+    const handleStop = useCallback(() => setIsRunning(false));
 
-    const handleReset = () => {
+    const handleReset = useCallback(() => {
         setIsRunning(false);
         setResetKey(prev => prev + 1);
-    };
+    });
 
     return (
         <div>
             <Timer
-                key={resetKey} // reset by remounting
-                settings={{ duration: 60 }} // example: 60 seconds
+                key={resetKey}
+                settings={{ duration: SECONDS_PER_MINUTE }}
                 onComplete={() => alert('Time is up!')}
                 isRunning={isRunning} 
             >
-                {(hours, minutes, seconds) => (
-                <span>
-                    {String(hours).padStart(2, '0')}:
-                    {String(minutes).padStart(2, '0')}:
-                    {String(seconds).padStart(2, '0')}
-                </span>
-            )}
+            {
+                (hours, minutes, seconds) => (
+                    <span>
+                        {String(hours).padStart(2, '0')}:
+                        {String(minutes).padStart(2, '0')}:
+                        {String(seconds).padStart(2, '0')}
+                    </span>
+                )
+            }
             </Timer>
             <div>
                 <Button onClick={handleStart}>Start</Button>

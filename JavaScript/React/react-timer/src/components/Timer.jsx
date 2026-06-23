@@ -1,4 +1,7 @@
 import {useState, useEffect} from 'react';
+import { SECONDS_PER_HOUR, SECONDS_PER_MINUTE } from "../constants/timeConstants";
+
+
 function Timer(props) {
     const {
         id,
@@ -6,16 +9,15 @@ function Timer(props) {
         onComplete,
         children,
         isRunning,
-     } = props;
+    } = props;
 
-    const SECONDS_PER_HOUR = 3600;
-    const SECONDS_PER_MINUTE = 60;
 
     const [remaining, setRemaining] = useState(settings.duration);
 
     useEffect(() =>{
-        if(remaining < 0) {
+        if (remaining < 0) {
             onComplete?.();
+
             return;
         }
 
@@ -24,7 +26,7 @@ function Timer(props) {
         }
 
         const interval = setInterval(() =>{
-            setRemaining(prev => prev -1);
+            setRemaining(prev => prev - 1);
         }, 1000);
 
         return () => clearInterval(interval);
@@ -36,7 +38,7 @@ function Timer(props) {
 
     return (
         <div id={id}>
-        {children(hours, minutes, seconds)}
+            {children(hours, minutes, seconds)}
         </div>
     );
 }
